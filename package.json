@@ -7,9 +7,9 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "frontend/src/**/*.{js,jsx,ts,tsx}": [
-      "npx --prefix frontend prettier --write",
-      "npx --prefix frontend eslint --fix"
+    "frontend/**/*.{js,jsx,ts,tsx}": [
+      "npx --prefix frontend eslint --fix",
+      "npx --prefix frontend prettier --write"
     ]
   }
 }
