@@ -1,0 +1,18 @@
+/* src/styles/index.css */
+@import "tailwindcss";
+
+/* Na v4, configuramos o tema aqui dentro usando @theme */
+@theme {
+  /* Cores personalizadas (substitui o tailwind.config.js) */
+  --color-primary: #110364;
+  --color-secondary: #F4C300;
+  --color-action: #2500FF;
+  --color-background: #EAEAEA;
+  --color-gray: #A1A1A1;
+  --color-red: #E20000;
+  --color-green: #119400;
+  --color-yellow: #FFD21D;
+
+  /* Fontes */
+  --font-sans: "Inter", sans-serif;
+}

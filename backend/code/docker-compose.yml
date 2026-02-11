@@ -1,0 +1,52 @@
+services:
+  api: &main_app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: code:${CODE_VERSION:-latest}
+    restart: always
+    env_file:
+      - path: .env
+        required: false
+    depends_on:
+      db:
+        condition: service_healthy
+      migrator:
+        condition: service_completed_successfully
+    environment:
+      CODE_HOST: 0.0.0.0
+      CODE_DB_HOST: code-db
+      CODE_DB_PORT: 5432
+      CODE_DB_USER: code
+      CODE_DB_PASS: code
+      CODE_DB_BASE: code
+
+  db:
+    image: postgres:18.1-bookworm
+    hostname: code-db
+    environment:
+      POSTGRES_PASSWORD: "code"
+      POSTGRES_USER: "code"
+      POSTGRES_DB: "code"
+    volumes:
+      - code-db-data:/var/lib/postgresql
+    restart: always
+    healthcheck:
+      test: pg_isready -U code
+      interval: 2s
+      timeout: 3s
+      retries: 40
+
+  migrator:
+    <<: *main_app
+    restart: "no"
+    command: alembic upgrade head
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+
+volumes:
+  code-db-data:
+    name: code-db-data
