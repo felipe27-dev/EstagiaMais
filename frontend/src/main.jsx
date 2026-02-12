@@ -1,25 +1,28 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import App from "./App.jsx";
 import "@/styles/index.css";
-import App from './App.jsx'
 
-// Função para iniciar o mock antes de renderizar o app
 async function enableMocking() {
-  if (process.env.NODE_ENV !== 'development') {
-    return
+  // No Vite, usamos import.meta.env.DEV para saber se estamos em desenvolvimento
+  if (!import.meta.env.DEV) {
+    return;
   }
 
-  const { worker } = await import('./mocks/browser')
+  const { worker } = await import("./mocks/browser");
+
   return worker.start({
-    onUnhandledRequest: 'bypass',
-  })
+    onUnhandledRequest: "bypass",
+  });
 }
 
-// Primeiro liga os mocks, depois renderiza
+// A ordem aqui é vital:
 enableMocking().then(() => {
-  createRoot(document.getElementById('root')).render(
+  const container = document.getElementById("root");
+  const root = createRoot(container);
+  root.render(
     <StrictMode>
       <App />
-    </StrictMode>,
-  )
-})
+    </StrictMode>
+  );
+});

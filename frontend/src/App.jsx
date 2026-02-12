@@ -1,23 +1,24 @@
 import { BrowserRouter } from "react-router-dom";
-
 import { AppRoutes } from "@/app/router/AppRoutes";
 import { QueryProvider } from "@/app/providers/QueryProvider";
 import { MuiThemeProvider } from "@/app/providers/ThemeProvider";
-import { useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "@/components/ui/ErrorFallback";
 
 function App() {
-  useEffect(() => {
-    console.log("Ta rodando sim uau muito teste mesmo teste");
-    console.log("funciona mesmo");
-  });
-
   return (
     <QueryProvider>
-      {}
       <MuiThemeProvider>
         <BrowserRouter>
-          <main className="min-h-screen bg-gray-50" form="" alvo="">
-            <AppRoutes />
+          <main className="min-h-screen bg-background items-center text-center ">
+            <ErrorBoundary
+              FallbackComponent={ErrorFallback}
+              onReset={() => {
+                window.location.href = "/";
+              }}
+            >
+              <AppRoutes />
+            </ErrorBoundary>
           </main>
         </BrowserRouter>
       </MuiThemeProvider>
