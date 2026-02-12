@@ -126,4 +126,4 @@ O frontend utiliza **MSW** para desenvolvimento isolado. Caso o backend não est
 
 ---
 
-**Estagia+** © 2024 - Desenvolvido com foco em eficiência e inovação.
+**Estagia+** © 2026 - Desenvolvido por Felipe de Souza Rosa.
