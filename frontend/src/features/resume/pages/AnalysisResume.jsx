@@ -1,17 +1,16 @@
 import Header from "@/components/layout/Header";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { EstagiaLoader } from "@/components/layout/Loading";
 import { ErrorFallback } from "@/components/ui/ErrorFallback";
-import { AppButton } from "@/components/ui/AppButton";
 import { CardLoadingAnalysis } from "@/features/resume/components/CardLoadingAnalysis";
 import { useState, useEffect } from "react"; // Importar hooks
+import { AnalysisDashboard } from "@features/resume/components/AnalysisDashboard";
 
 // Variável externa para teste (mantive sua lógica)
 let mockStep = 0;
 
 export const AnalysisResume = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
 
   // Estado Visual: Controla se mostramos o resultado ou a animação final
@@ -57,36 +56,9 @@ export const AnalysisResume = () => {
 
   return (
     <>
-      <Header />
-      <div className="h-screen flex justify-center items-center bg-background">
-        <div
-          className={`bg-white w-[60%] rounded-3xl border border-gray-200
-                    card-border-glow shadow-xl overflow-hidden items-center justify-center  flex-col flex-cols-1 p-10 hover:scale-[1.05] transition-transform`}
-        >
-          <h1 className="text-3xl font-bold text-green mb-6">
-            Análise {id} concluída!
-          </h1>
-          <h1 className="text-2xl font-bold text-primary mb-6">
-            O que deseja fazer com os currículos?
-          </h1>
-          <div className="w-full flex justify-center mt-3 gap-4 flex-col">
-            <AppButton
-              children="Criar Pasta"
-              color="secondary"
-              onClick={() => navigate("/search-resume")}
-            />
-            <AppButton
-              children="Enviar"
-              color="primary"
-              onClick={() => navigate("/")}
-            />
-            <AppButton
-              children="Visualizar"
-              color="action"
-              onClick={() => navigate("/")}
-            />
-          </div>
-        </div>
+      <Header fixed={false} />
+      <div className="h-full mt-10 mb-10 flex justify-center items-center bg-background">
+        <AnalysisDashboard id={id} />
       </div>
     </>
   );
