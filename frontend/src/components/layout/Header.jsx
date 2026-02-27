@@ -18,9 +18,6 @@ export default function Header({ fixed = true }) {
     setSettingsMenuAnchor(null);
   };
 
-  const menuItemClass =
-    "text-primary p-3 hover:bg-primary hover:text-white hover:font-bold cursor-pointer transition-colors";
-
   return (
     <header
       className={`w-full ${fixed ? "fixed" : ""} h-22 p-6 px-10 flex items-center justify-between bg-primary z-50 shadow-md`}
@@ -43,17 +40,20 @@ export default function Header({ fixed = true }) {
           open={Boolean(userMenuAnchor)}
           anchorEl={userMenuAnchor}
           onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          transformOrigin={{ vertical: "top", horizontal: "center" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          PaperProps={{
+            style: { padding: "8px", borderRadius: "12px", minWidth: "120px" },
+          }}
         >
           <div className="flex flex-col">
             <p
-              className={menuItemClass}
+              className="menu-item-class"
               onClick={() => navigate("/recadastro")}
             >
               Mudar Cadastro
             </p>
-            <p className={menuItemClass} onClick={() => navigate("/login")}>
+            <p className="menu-item-class" onClick={() => navigate("/login")}>
               Sair
             </p>
           </div>
@@ -69,12 +69,15 @@ export default function Header({ fixed = true }) {
           open={Boolean(settingsMenuAnchor)}
           anchorEl={settingsMenuAnchor}
           onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-          transformOrigin={{ vertical: "top", horizontal: "center" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          PaperProps={{
+            style: { padding: "8px", borderRadius: "12px", minWidth: "120px" },
+          }}
         >
           <div className="flex flex-col">
-            <p className={menuItemClass}>Alterar Tema</p>
-            <p className={menuItemClass}>Guia de Uso</p>
+            <p className="menu-item-class">Alterar Tema</p>
+            <p className="menu-item-class">Guia de Uso</p>
           </div>
         </Popover>
       </div>

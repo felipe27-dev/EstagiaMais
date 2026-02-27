@@ -5,7 +5,7 @@ import { EstagiaLoader } from "@/components/layout/Loading";
 import { ErrorFallback } from "@/components/ui/ErrorFallback";
 import { CardLoadingAnalysis } from "@/features/resume/components/CardLoadingAnalysis";
 import { useState, useEffect } from "react"; // Importar hooks
-import { AnalysisDashboard } from "@features/resume/components/AnalysisDashboard";
+import { AnalysisDashboard } from "@/features/resume/components/AnalysisDashboard";
 
 // Variável externa para teste (mantive sua lógica)
 let mockStep = 0;

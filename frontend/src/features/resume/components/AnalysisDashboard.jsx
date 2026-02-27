@@ -71,6 +71,14 @@ export const AnalysisDashboard = ({ id }) => {
         <CardShowResumes
           curriculos={curriculos}
           handleCloseResumes={() => setVisualMode(false)}
+          renderMenuOptions={() => (
+            <>
+              <p className="menu-item-class">Retirar</p>
+              <p className="menu-item-class" onClick={handleDownload}>
+                Baixar
+              </p>
+            </>
+          )}
         />
       </CardWrapper>
     );

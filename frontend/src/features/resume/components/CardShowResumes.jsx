@@ -5,75 +5,102 @@ import { useNavigate } from "react-router-dom";
 import { AppButton } from "@/components/ui/AppButton";
 import { IoDocument } from "react-icons/io5";
 
-export const CardShowResumes = ({ curriculos, handleCloseResumes }) => {
-  const [menuAnchor, setMenuAnchor] = useState(null);
+// 1. Sub-componente: Gerencia o estado visual de UM card individualmente
+const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleOpenMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+    event.stopPropagation();
+  };
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+  //const handleOptionClick = (action) => { handleCloseMenu(); if (action) action(); };
+
+  return (
+    <div className="w-40 h-fit py-6  bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow m-2 flex items-center justify-center flex-col relative border border-gray-100">
+      <div className="absolute top-2 right-2">
+        <IoMdMenu
+          size={24}
+          className="text-gray-400 hover:text-primary cursor-pointer transition-colors"
+          onClick={handleOpenMenu}
+        />
+        <Popover
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          onClose={handleCloseMenu}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+          PaperProps={{
+            style: { padding: "8px", borderRadius: "12px", minWidth: "120px" },
+          }}
+        >
+          <div className="flex flex-col text-md text-gray-600">
+            {renderMenuOptions && renderMenuOptions(curriculo, handleCloseMenu)}
+          </div>
+        </Popover>
+      </div>
+      <div className="mt-4" onClick={() => onSelect(curriculo)}>
+        <IoDocument
+          size={80}
+          className="text-primary hover:text-action cursor-pointer hover:scale-105 transition-transform duration-200"
+        />
+      </div>
+
+      <div className="px-2 mt-3 w-full text-center text-wrap">
+        <p
+          className="text-primary text-md font-bold truncate w-full"
+          title={curriculo.nome}
+        >
+          {curriculo.nome}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// 2. Componente Principal: Apenas renderiza a lista
+export const CardShowResumes = ({
+  curriculos,
+  handleCloseResumes,
+  renderMenuOptions,
+}) => {
   const navigate = useNavigate();
-
-  const handleMenuClick = (event) => {
-    setMenuAnchor(event.currentTarget);
-  };
-  const handleClose = () => {
-    setMenuAnchor(null);
-  };
-  const menuItemClass =
-    "text-primary p-6 py-2 hover:bg-primary hover:text-white hover:font-bold cursor-pointer transition-colors";
-
-  const handleSelectResume = (idResume) => {
-    const curriculoSelected = curriculos[idResume];
-    navigate(`/resume/${idResume}`, {
-      state: { curriculo: curriculoSelected },
-    });
+  const handleSelectResume = (curriculo) => {
+    navigate(`/resume/${curriculo.id}`, { state: { curriculo } });
   };
 
   return (
-    <>
-      <div className="w-full bg-background rounded-xl flex max-h-90 justify-center flex-row flex-rows-5 flex-wrap gap-[5%] overflow-auto">
+    <div className="w-full h-full flex flex-col relative">
+      {/* Grid de Cards */}
+      <div className="w-full bg-background/50 rounded-xl flex flex-wrap content-start gap-4 overflow-y-auto p-4 max-h-[330px] scrollbar-thin scrollbar-thumb-gray-300">
         {curriculos.map((curriculo, index) => (
-          <div className="w-40 h-40 bg-white rounded-md m-2 flex items-center justify-center flex-col">
-            <div className="relative left-1/3 top-2">
-              <IoMdMenu
-                size={30}
-                className="text-primary hover:text-action cursor-pointer"
-                onClick={handleMenuClick}
-              />
-              <Popover
-                open={Boolean(menuAnchor)}
-                anchorEl={menuAnchor}
-                onClose={handleClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                transformOrigin={{ vertical: "top", horizontal: "center" }}
-              >
-                <div className="flex flex-col">
-                  <p className={menuItemClass}>Retirar</p>
-                  <p className={menuItemClass}>Baixar</p>
-                </div>
-              </Popover>
-            </div>
-            <div className="m-0 p-0">
-              <IoDocument
-                size={90}
-                className="text-primary hover:text-action cursor-pointer hover:scale-3d"
-                onClick={() => handleSelectResume(index)}
-              />
-            </div>
-            <p className="text-primary text-[15px] mb-2 font-bold w-full text-wrap p-1">
-              Currículo {index + 1} - {curriculo.nome.slice(0, 15)}
-              {curriculo.nome.length > 15 ? "..." : ""}
-            </p>{" "}
-            {/* Aparece no máximo 15 letras, se tiver mais aparece ... */}
-          </div>
+          <ResumeCard
+            key={curriculo.id || index} // Use ID se possível, index é fallback
+            index={index}
+            curriculo={curriculo}
+            onSelect={handleSelectResume}
+            renderMenuOptions={renderMenuOptions}
+          />
         ))}
+
+        {curriculos.length === 0 && (
+          <div className="w-full text-center py-20 text-gray-400">
+            Nenhum currículo encontrado.
+          </div>
+        )}
       </div>
-      <AppButton
-        onClick={() => {
-          handleCloseResumes;
-        }}
-        className="absolute left-98 -bottom-2"
-        padding="4px 20px"
-        fontSize="18px"
-      >
-        Voltar
-      </AppButton>
-    </>
+
+      <div className="mt-6 flex justify-center">
+        <AppButton
+          onClick={handleCloseResumes}
+          padding="8px 32px"
+          fontSize="16px"
+        >
+          Voltar
+        </AppButton>
+      </div>
+    </div>
   );
 };

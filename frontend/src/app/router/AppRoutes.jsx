@@ -42,6 +42,18 @@ const AccessResume = lazy(async () => {
   return { default: module.AcessResumes };
 });
 
+const ResumeEdit = lazy(async () => {
+  await delay();
+  const module = await import("@/features/resume/pages/ResumeEdit");
+  return { default: module.ResumeEdit };
+});
+
+const SendResumesDatabase = lazy(async () => {
+  await delay();
+  const module = await import("@/features/resume/pages/SendResumesDatabase");
+  return { default: module.SendResumesDatabase };
+});
+
 // Componente de Loading (Simples e Centralizado)
 const PageLoader = () => <EstagiaLoader />;
 
@@ -57,6 +69,11 @@ export const AppRoutes = () => {
         <Route path="/resume/:id" element={<ResumeSelected />} />
         <Route path="/recadastro" element={<ChangeInfos />} />
         <Route path="/access-resume" element={<AccessResume />} />
+        <Route path="/resume-edit/:id" element={<ResumeEdit />} />
+        <Route
+          path="/send-resumes-database"
+          element={<SendResumesDatabase />}
+        />
       </Routes>
     </Suspense>
   );

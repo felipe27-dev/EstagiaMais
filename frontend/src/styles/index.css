@@ -16,3 +16,18 @@
   /* Fontes */
   --font-sans: "Inter", sans-serif;
 }
+
+.menu-item-class{
+  color: var(--color-primary);
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menu-item-class:hover{
+  background-color: var(--color-primary);
+  color: white;
+  font-weight: bold;
+}
+

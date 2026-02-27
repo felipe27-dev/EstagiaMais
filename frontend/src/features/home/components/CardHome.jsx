@@ -25,7 +25,7 @@ export default function CardHome() {
           <AppButton
             children="Enviar Currículos ao Banco"
             color="primary"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/send-resumes-database")}
           />
           <AppButton
             children="Acessar Banco"
