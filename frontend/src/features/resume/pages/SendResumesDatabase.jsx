@@ -7,13 +7,14 @@ import { ErrorFallback } from "@/components/ui/ErrorFallback";
 // Importação fictícia dos componentes que você já deve ter ou criará
 import { ResumeUploadForm } from "@/features/resume/components/ResumeUploadForm";
 import { CardLoadingAnalysis } from "@/features/resume/components/CardLoadingAnalysis";
-//import { ResumeVerificationFlow } from "@/features/resume/components/ResumeVerificationFlow";
+import { ResumeVerificationFlow } from "@/features/resume/components/ResumeVerificationFlow";
 
 // Variável para simular o progresso do backend no mock
 let mockProgressStep = 0;
 
 export const SendResumesDatabase = () => {
   const [currentStep, setCurrentStep] = useState("UPLOAD");
+  const [uploadedFiles, setUploadedFiles] = useState([]);
 
   // --- 1. Lógica de Envio (Mutation) ---
   const { mutate: uploadResumes, isPending: isUploading } = useMutation({
@@ -64,20 +65,27 @@ export const SendResumesDatabase = () => {
   if (isError)
     return <ErrorFallback error="Erro ao processar lote de currículos" />;
 
+  const handleUpload = (files) => {
+    setUploadedFiles(files); // Guarda os PDFs reais no pai
+    uploadResumes(files); // Dispara a mutation para o backend
+  };
+
   const renderContent = () => {
     switch (currentStep) {
       case "UPLOAD":
         return isUploading ? (
           <EstagiaLoader />
         ) : (
-          <ResumeUploadForm onUpload={uploadResumes} />
+          <ResumeUploadForm onUpload={handleUpload} />
         );
 
       case "PROCESSING":
         return (
-          <div className="flex flex-col items-center">
+          <div className="flex h-full items-center justify-center text-center">
             <CardLoadingAnalysis
               isCompleted={analysisData?.status === "COMPLETED"}
+              contentFinished="Análise concluída!"
+              contentLoad="Análise em andamento..."
             />
           </div>
         );
@@ -86,7 +94,7 @@ export const SendResumesDatabase = () => {
         return (
           <div className="w-full h-full max-w-5xl mx-auto mt-6">
             {/* Aqui entra o componente que mostra currículo por currículo */}
-            {/*<ResumeVerificationFlow />*/}
+            <ResumeVerificationFlow uploadedFiles={uploadedFiles} />
           </div>
         );
 
@@ -97,10 +105,10 @@ export const SendResumesDatabase = () => {
 
   return (
     <>
-      <Header />
+      <Header fixed={false} />
 
       <div
-        className={`h-screen w-full bg-background flex justify-center items-center `}
+        className={`h-auto w-full bg-background flex justify-center items-center `}
       >
         {renderContent()}
       </div>

@@ -15,9 +15,6 @@ export const CardEditResume = () => {
             <h1 className="text-3xl font-bold text-primary ">
               Editar Currículo
             </h1>
-            <p className="text-gray-500 text-sm mt-1">
-              Atualize as informações do candidato e salve as alterações.
-            </p>
           </div>
           <div className="flex gap-3">
             <AppButton
@@ -43,7 +40,7 @@ export const CardEditResume = () => {
           {/* COLUNA 1: Visualização do Documento (PDF) */}
           <div className="w-full lg:w-1/2 p-8 bg-gray-50 border-r border-gray-100 flex flex-col items-center">
             {/* Container do PDF/Placeholder */}
-            <div className="w-full h-[600px] bg-gray-200 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center relative overflow-hidden group">
+            <div className="w-full h-150 bg-gray-200 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center relative overflow-hidden group">
               {/* Aqui viria seu <iframe src={pdfUrl} ... /> */}
               <div className="text-center p-6">
                 <p className="text-gray-500 font-medium">
@@ -74,17 +71,6 @@ export const CardEditResume = () => {
                 placeholder="Ex: Felipe de Souza Rosa"
                 InputLabelProps={{ shrink: true }}
               />
-
-              {/* Linha 2: Cargo e Empresa (Lado a Lado) */}
-              <div className="flex flex-col md:flex-row gap-4 ">
-                <TextField
-                  label="Cargo Atual"
-                  variant="outlined"
-                  fullWidth
-                  placeholder="Ex: Desenvolvedor Web"
-                  InputLabelProps={{ shrink: true }}
-                />
-              </div>
 
               {/* Linha 3: Contatos */}
               <div className="flex flex-col md:flex-row gap-4">
