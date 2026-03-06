@@ -1,17 +1,34 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState,useCallback } from "react";
 import Header from "@/components/layout/Header";
-
-// 1. O PULO DO GATO: Importe o arquivo aqui!
 import curriculoDemo from "@/assets/Curriculo_Felipe_de_Souza_Rosa.pdf";
+import { resumeService } from "../../../services/resumeServices";
 
 export const ResumeSelected = () => {
   const location = useLocation();
+  //pega o id, que está na url
+  const id = location.pathname.split("/")[2];
   const navigate = useNavigate();
-  const curriculo = location.state?.curriculo; // Adicionei o optional chaining (?) por segurança
+  const [curriculo, setCurriculo] = useState(null);
 
-  // Lógica para decidir qual PDF mostrar:
-  // Se tiver URL vindo do backend (curriculo.url), usa ela. Se não, usa o import local.
-  const pdfUrl = curriculo?.url || curriculoDemo;
+  const handleResumeSelect = useCallback(async() => {
+    try{
+      if (location.state?.curriculo){
+        const { curriculo } = location.state;
+        setCurriculo(curriculo);
+      }else{
+        const data = await resumeService.getById(id);
+        setCurriculo(data);
+      }
+    }catch(e){
+      console.error("Erro encontrado:",e)
+    }
+
+  },[])
+
+  useEffect(() => {
+    handleResumeSelect() 
+  },[handleResumeSelect])
 
   return (
     <>
@@ -21,7 +38,7 @@ export const ResumeSelected = () => {
           {/* Cabeçalho do Card */}
           <div className="p-6 border-b border-gray-100 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-primary">
-              Currículo de {curriculo?.nome || "Candidato"}
+              Currículo de {curriculo?.name_candidate || "Candidato"}
             </h1>
             <button
               onClick={() => navigate(-1)}
@@ -34,15 +51,15 @@ export const ResumeSelected = () => {
           {/* Área do PDF */}
           <div className="flex-1 w-full h-full bg-gray-100 relative rounded-2xl">
             <iframe
-              src={pdfUrl}
-              className="w-full rounded-xl h-[700px]"
+              src={(curriculo?.url || curriculoDemo)}
+              className="w-full rounded-xl h-175"
               title="Visualizador de Currículo"
               style={{ border: "none" }}
             >
               <p className="p-10 text-center">
                 Seu navegador não suporta visualização de PDF.
                 <a
-                  href={pdfUrl}
+                  href={curriculo?.url || curriculoDemo}
                   target="_blank"
                   rel="noreferrer"
                   className="text-primary underline ml-1"

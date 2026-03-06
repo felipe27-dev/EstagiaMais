@@ -45,7 +45,8 @@ class Settings(BaseSettings):
     db_pass: str = "code"  # noqa: S105
     db_base: str = "admin"
     db_echo: bool = False
-
+    url_backend: str = "http://localhost:8080"
+    gemini_api_key: str = ""
     @property
     def db_url(self) -> URL:
         """

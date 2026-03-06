@@ -4,7 +4,9 @@ import App from "./App.jsx";
 import "@/styles/index.css";
 
 async function enableMocking() {
-  // No Vite, usamos import.meta.env.DEV para saber se estamos em desenvolvimento
+
+  return; 
+  /*
   if (!import.meta.env.DEV) {
     return;
   }
@@ -13,10 +15,9 @@ async function enableMocking() {
 
   return worker.start({
     onUnhandledRequest: "bypass",
-  });
+  });*/
 }
 
-// A ordem aqui é vital:
 enableMocking().then(() => {
   const container = document.getElementById("root");
   const root = createRoot(container);

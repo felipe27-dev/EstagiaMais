@@ -51,9 +51,9 @@ const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
       <div className="px-2 mt-3 w-full text-center text-wrap">
         <p
           className="text-primary text-md font-bold truncate w-full"
-          title={curriculo.nome}
+          title={curriculo.name_candidate}
         >
-          {curriculo.nome}
+          {curriculo.name_candidate}
         </p>
       </div>
     </div>

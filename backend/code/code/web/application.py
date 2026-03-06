@@ -4,6 +4,9 @@ from code.web.lifespan import lifespan_setup
 
 from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import os
 
 
 def get_app() -> FastAPI:
@@ -16,7 +19,7 @@ def get_app() -> FastAPI:
     """
     configure_logging()
     app = FastAPI(
-        title="code",
+        title="Estagia+ API",
         lifespan=lifespan_setup,
         docs_url="/api/docs",
         redoc_url="/api/redoc",
@@ -24,7 +27,17 @@ def get_app() -> FastAPI:
         default_response_class=UJSONResponse,
     )
 
-    # Main router for the API.
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173"], 
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+    os.makedirs("uploads", exist_ok=True)
+    
+    app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
     app.include_router(router=api_router, prefix="/api")
 
     return app
