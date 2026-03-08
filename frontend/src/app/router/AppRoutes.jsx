@@ -19,11 +19,6 @@ const SearchResume = lazy(async () => {
   const module = await import("@/features/resume/pages/SearchResume");
   return { default: module.SearchResume };
 });
-const AnalysisResume = lazy(async () => {
-  await delay();
-  const module = await import("@/features/resume/pages/AnalysisResume");
-  return { default: module.AnalysisResume };
-});
 const ResumeSelected = lazy(async () => {
   await delay();
   const module = await import("@/features/resume/pages/ResumeSelected");
@@ -65,7 +60,6 @@ export const AppRoutes = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/search-resume" element={<SearchResume />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/analysis-resume/:id" element={<AnalysisResume />} />
         <Route path="/resume/:id" element={<ResumeSelected />} />
         <Route path="/recadastro" element={<ChangeInfos />} />
         <Route path="/access-resume" element={<AccessResume />} />

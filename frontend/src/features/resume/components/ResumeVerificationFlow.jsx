@@ -1,67 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   User,
   Mail,
   Phone,
-  Briefcase,
   GraduationCap,
   ChevronRight,
   ChevronLeft,
   CheckCircle,
   FileText,
   Save,
+  Loader2
 } from "lucide-react";
 import { AppButton } from "@/components/ui/AppButton";
 import { useNavigate } from "react-router-dom";
+import { resumeService } from "../../../services/resumeServices"; // Ajuste o caminho se necessário
 
-// Mock de dados da IA
-const mockParsedResumes = [
-  {
-    id: "req_1",
-    name: "Carlos Eduardo Silva",
-    email: "carlos.silva@email.com",
-    phone: "(11) 98765-4321",
-    role: "Desenvolvedor Front-end",
-    skills: "React, JavaScript, Tailwind, Git",
-    experience: "3 anos como desenvolvedor web criando interfaces responsivas.",
-  },
-  {
-    id: "req_2",
-    name: "Ana Cláudia Souza",
-    email: "ana.souza@email.com",
-    phone: "(21) 99999-1111",
-    role: "Engenheira de Software Pleno",
-    skills: "Node.js, Python, PostgreSQL, AWS",
-    experience:
-      "Desenvolvimento de APIs RESTful e arquitetura de microserviços.",
-  },
-];
-
-export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
-  const [resumes, setResumes] = useState(mockParsedResumes);
+export const ResumeVerificationFlow = ({ drafts = [] }) => {
+  // Inicializamos o estado com os dados que vieram do backend
+  const [resumes, setResumes] = useState(drafts);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // Controle de loading final
   const navigate = useNavigate();
-  const [pdfUrl, setPdfUrl] = useState(null);
 
   const currentResume = resumes[currentIndex];
   const isLastResume = currentIndex === resumes.length - 1;
 
-  // Efeito para gerar e limpar a URL do PDF conforme mudamos de currículo
-  useEffect(() => {
-    if (uploadedFiles.length > 0 && uploadedFiles[currentIndex]) {
-      const file = uploadedFiles[currentIndex];
-      const url = URL.createObjectURL(file);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setPdfUrl(url);
-
-      // Limpeza de memória
-      return () => URL.revokeObjectURL(url);
-    } else {
-      setPdfUrl(null); // Reseta a URL se não houver arquivo correspondente
-    }
-  }, [currentIndex, uploadedFiles]);
-
+  // Função genérica para atualizar os campos do currículo atual
   const handleInputChange = (field, value) => {
     setResumes((prev) => {
       const updatedResumes = [...prev];
@@ -73,13 +38,24 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
     });
   };
 
-  const handleNext = () => {
-    if (isLastResume) setIsFinished(true);
-    else setCurrentIndex((prev) => prev + 1);
-  };
+  const handleNext = () => { if (currentIndex < resumes.length - 1) setCurrentIndex((prev) => prev + 1) };
 
-  const handlePrev = () => {
-    if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
+  const handlePrev = () => { if (currentIndex > 0) setCurrentIndex((prev) => prev - 1); };
+
+  const handleFinalize = async () => {
+    setIsSaving(true);
+    try {
+      const savePromises = resumes.map((resume) => resumeService.create(resume));
+      
+      await Promise.all(savePromises);
+      
+      setIsFinished(true);
+    } catch (error) {
+      console.error("Erro ao salvar currículos finais:", error);
+      alert("Houve um erro ao salvar no banco. Tente novamente.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isFinished) {
@@ -90,24 +66,21 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
           Revisão Concluída!
         </h2>
         <p className="text-gray-600 mb-8">
-          Todos os currículos foram verificados e adicionado ao banco de dados.
+          Todos os currículos foram verificados e adicionados ao banco de dados com sucesso.
         </p>
         <AppButton
-          onClick={() => {
-            navigate("/");
-            window.location.reload();
-          }}
-          padding="10px 20px"
-          className=" bg-primary text-white font-semibold py-3 px-8 rounded-xl hover:bg-primary/90 transition-all"
+          onClick={() => navigate("/resumes")} // Ajuste para a sua rota de listagem
+          className="bg-primary text-white font-semibold py-3 px-8 rounded-xl hover:bg-primary/90 transition-all"
         >
-          Voltar para o Início
+          Ver Currículos Salvos
         </AppButton>
       </div>
     );
   }
 
+  if (!currentResume) return null;
+
   return (
-    // Altura fixa grande para comportar bem o PDF e o scroll do formulário
     <div className="w-full h-[85vh] bg-white mb-10 rounded-2xl shadow-xl border border-gray-200 overflow-hidden flex flex-col animate-fade-in">
       {/* Cabeçalho */}
       <div className="bg-gray-50 border-b border-gray-200 p-5 flex items-center justify-between z-10 shrink-0">
@@ -121,11 +94,13 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
         </div>
       </div>
 
-      {/* Layout Principal Dividido (50/50 Permanente) */}
+      {/* Layout Principal Dividido */}
       <div className="flex flex-1 overflow-hidden relative bg-gray-100">
+        
         {/* Lado Esquerdo: Formulário de Edição */}
         <div className="w-1/2 bg-white p-8 overflow-y-auto border-r border-gray-200 custom-scrollbar">
           <div className="grid grid-cols-1 gap-8">
+            
             {/* Seção: Dados Pessoais */}
             <div className="space-y-4">
               <h3 className="font-semibold text-gray-700 border-b pb-2 mb-4">
@@ -133,46 +108,40 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
               </h3>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">
-                  Nome Completo
-                </label>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">Nome Completo</label>
                 <div className="relative flex items-center">
                   <User size={18} className="absolute left-3 text-gray-400" />
                   <input
                     type="text"
-                    value={currentResume.name}
-                    onChange={(e) => handleInputChange("name", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+                    value={currentResume.name_candidate || ""}
+                    onChange={(e) => handleInputChange("name_candidate", e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">
-                  E-mail
-                </label>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">E-mail</label>
                 <div className="relative flex items-center">
                   <Mail size={18} className="absolute left-3 text-gray-400" />
                   <input
                     type="email"
-                    value={currentResume.email}
-                    onChange={(e) => handleInputChange("email", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+                    value={currentResume.email_candidate || ""}
+                    onChange={(e) => handleInputChange("email_candidate", e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">
-                  Telefone
-                </label>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">Telefone</label>
                 <div className="relative flex items-center">
                   <Phone size={18} className="absolute left-3 text-gray-400" />
                   <input
                     type="text"
-                    value={currentResume.phone}
-                    onChange={(e) => handleInputChange("phone", e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
+                    value={currentResume.phone_candidate || ""}
+                    onChange={(e) => handleInputChange("phone_candidate", e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -185,36 +154,25 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
               </h3>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">
-                  Habilidades Principais
-                </label>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">Formação Acadêmica</label>
                 <div className="relative flex items-start">
-                  <GraduationCap
-                    size={18}
-                    className="absolute left-3 top-3 text-gray-400"
-                  />
+                  <GraduationCap size={18} className="absolute left-3 top-3 text-gray-400" />
                   <textarea
                     rows={2}
-                    value={currentResume.skills}
-                    onChange={(e) =>
-                      handleInputChange("skills", e.target.value)
-                    }
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all resize-none"
+                    value={currentResume.degree_candidate || ""}
+                    onChange={(e) => handleInputChange("degree_candidate", e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
                   />
                 </div>
               </div>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">
-                  Resumo do Curriculo/Anotações{" "}
-                </label>
+                <label className="text-xs font-semibold text-gray-500 mb-1 block">Resumo do Perfil gerado pela IA</label>
                 <textarea
                   rows={6}
-                  value={currentResume.experience}
-                  onChange={(e) =>
-                    handleInputChange("experience", e.target.value)
-                  }
-                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all resize-none"
+                  value={currentResume.profile_candidate || ""}
+                  onChange={(e) => handleInputChange("profile_candidate", e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none"
                 />
               </div>
             </div>
@@ -223,9 +181,10 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
 
         {/* Lado Direito: Visualizador de PDF Permanente */}
         <div className="w-1/2 h-full bg-[#525659] flex flex-col items-center justify-center">
-          {pdfUrl ? (
+          {currentResume.resume_archive ? (
             <iframe
-              src={`${pdfUrl}#view=FitH&toolbar=0&navpanes=0`}
+              // Substitui temporariamente HTTPS por HTTP para evitar erro de certificado no localhost
+              src={`${currentResume.resume_archive.replace("https://", "http://")}#view=FitH&toolbar=0&navpanes=0`}
               title="Visualizador de PDF Original"
               className="w-full h-full border-none"
             />
@@ -242,23 +201,29 @@ export const ResumeVerificationFlow = ({ uploadedFiles = [] }) => {
       <div className="bg-gray-50 border-t border-gray-200 p-5 flex items-center justify-between z-10 shrink-0">
         <AppButton
           onClick={handlePrev}
-          disabled={currentIndex === 0}
+          disabled={currentIndex === 0 || isSaving}
           padding="4px 18px"
         >
           <ChevronLeft size={20} /> Anterior
         </AppButton>
 
-        <AppButton onClick={handleNext} padding="4px 18px">
-          {isLastResume ? (
-            <>
-              <Save className="mr-2" size={20} /> Finalizar Envio
-            </>
-          ) : (
-            <>
-              Próximo <ChevronRight className="ml-2" size={20} />
-            </>
-          )}
-        </AppButton>
+        {isLastResume ? (
+          <AppButton 
+            onClick={handleFinalize} 
+            padding="4px 18px"
+            disabled={isSaving}
+          >
+            {isSaving ? (
+              <> <Loader2 className="mr-2 animate-spin" size={20} /> Salvando... </>
+            ) : (
+              <> <Save className="mr-2" size={20} /> Finalizar Envio </>
+            )}
+          </AppButton>
+        ) : (
+          <AppButton onClick={handleNext} padding="4px 18px">
+            Próximo <ChevronRight className="ml-2" size={20} />
+          </AppButton>
+        )}
       </div>
     </div>
   );

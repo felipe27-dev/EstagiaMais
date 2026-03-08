@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate,useParams } from "react-router-dom";
 import { useEffect, useState,useCallback } from "react";
 import Header from "@/components/layout/Header";
 import curriculoDemo from "@/assets/Curriculo_Felipe_de_Souza_Rosa.pdf";
@@ -7,7 +7,7 @@ import { resumeService } from "../../../services/resumeServices";
 export const ResumeSelected = () => {
   const location = useLocation();
   //pega o id, que está na url
-  const id = location.pathname.split("/")[2];
+  const { id } = useParams();
   const navigate = useNavigate();
   const [curriculo, setCurriculo] = useState(null);
 
@@ -17,14 +17,19 @@ export const ResumeSelected = () => {
         const { curriculo } = location.state;
         setCurriculo(curriculo);
       }else{
+        if (!id || isNaN(Number(id))) {
+           console.error("ID inválido na URL:", id);
+           return; 
+        }
         const data = await resumeService.getById(id);
         setCurriculo(data);
+        console.log("Currículo selecionado:", curriculo);
       }
     }catch(e){
       console.error("Erro encontrado:",e)
     }
 
-  },[])
+  },[id,location.state])
 
   useEffect(() => {
     handleResumeSelect() 
@@ -51,7 +56,7 @@ export const ResumeSelected = () => {
           {/* Área do PDF */}
           <div className="flex-1 w-full h-full bg-gray-100 relative rounded-2xl">
             <iframe
-              src={(curriculo?.url || curriculoDemo)}
+              src={(curriculo?.resume_archive?.replace("https://", "http://"))}
               className="w-full rounded-xl h-175"
               title="Visualizador de Currículo"
               style={{ border: "none" }}
@@ -59,7 +64,7 @@ export const ResumeSelected = () => {
               <p className="p-10 text-center">
                 Seu navegador não suporta visualização de PDF.
                 <a
-                  href={curriculo?.url || curriculoDemo}
+                  href={curriculo?.resume_archive }
                   target="_blank"
                   rel="noreferrer"
                   className="text-primary underline ml-1"

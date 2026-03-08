@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import Header from "@/components/layout/Header";
 import { EstagiaLoader } from "@/components/layout/Loading";
 import { ErrorFallback } from "@/components/ui/ErrorFallback";
+import { resumeService } from "../../../services/resumeServices";
 
 // Importação fictícia dos componentes que você já deve ter ou criará
 import { ResumeUploadForm } from "@/features/resume/components/ResumeUploadForm";
@@ -15,55 +16,55 @@ let mockProgressStep = 0;
 export const SendResumesDatabase = () => {
   const [currentStep, setCurrentStep] = useState("UPLOAD");
   const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [scratchAnalysisResult, setScratchAnalysisResult] = useState([]); // Array de rascunhos
 
-  // --- 1. Lógica de Envio (Mutation) ---
+  // --- 1. A Única Lógica Real de Envio (Mutation) ---
   const { mutate: uploadResumes, isPending: isUploading } = useMutation({
-    mutationFn: async (/*files*/) => {
-      // Simula o envio dos arquivos para o servidor
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      mockProgressStep = 0; // Reseta o mock para a nova análise
-      return { batchId: "batch_" + Math.random().toString(36).substr(2, 9) };
+    // onMutate roda no exato milissegundo em que o usuário clica no botão
+    onMutate: () => {
+      // Muda a tela imediatamente para a animação de carregamento
+      setCurrentStep("PROCESSING"); 
     },
-    onSuccess: () => {
-      setCurrentStep("PROCESSING");
-    },
-  });
+    
+    // mutationFn é onde a promessa real acontece
+    mutationFn: async (filesToUpload) => {
+      try {
+        const uploadPromises = filesToUpload.map(async (file) => {
+          console.log("Arquivo enviado para análise:", file.name);
+          const draftData = await resumeService.uploadAnalysis(file); 
+          setScratchAnalysisResult(prev => [...prev, draftData]);
+          // Guarda o nome do arquivo original junto com o resultado da IA
+          return { ...draftData, originalFileName: file.name };
+        });
 
-  // --- 2. Lógica de Polling (Status da IA) ---
-  const { data: analysisData, isError } = useQuery({
-    queryKey: ["analysis-status"],
-    queryFn: async () => {
-      // Simula a chamada de API que verifica o status no banco
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+        const allDrafts = await Promise.all(uploadPromises);
+        return allDrafts;
 
-      if (mockProgressStep < 3) {
-        mockProgressStep++;
-        return { status: "PROCESSING" };
+      } catch (e) {
+        console.error("Erro ao enviar currículos:", e);
+        throw e; 
       }
-      return { status: "COMPLETED" };
     },
-    // Só ativa o polling quando estiver na tela de carregamento
-    enabled: currentStep === "PROCESSING",
-    refetchInterval: (query) => {
-      return query.state.data?.status === "PROCESSING" ? 2000 : false;
-    },
-  });
 
-  // --- 3. Transição Automática de Tela ---
-  useEffect(() => {
-    if (analysisData?.status === "COMPLETED") {
-      // Delay de 3s para o usuário ver a animação de "Concluído" antes de mudar
-      const timer = setTimeout(() => {
-        setCurrentStep("VERIFICATION");
-      }, 3000);
-      return () => clearTimeout(timer);
+    // onSuccess roda assim que o Promise.all termina e recebe o array de resultados
+    onSuccess: (draftsArray) => {
+      // 1. Salva os dados reais da IA no seu estado
+      setScratchAnalysisResult(draftsArray);
+      
+      // 2. Opcional: Um pequeno delay de 1 segundo só para a transição ficar suave
+      setTimeout(() => {
+        setCurrentStep("VERIFICATION"); // Vai pra tela de edição/revisão
+      }, 1000);
+    },
+    
+    onError: () => {
+      // Se der erro (ex: backend caiu), volta pra tela de upload
+      setCurrentStep("UPLOAD");
+      alert("Houve um erro ao analisar os currículos. Tente novamente.");
     }
-  }, [analysisData?.status]);
+  });
 
   // --- Renderização por Estado ---
-
-  if (isError)
-    return <ErrorFallback error="Erro ao processar lote de currículos" />;
 
   const handleUpload = (files) => {
     setUploadedFiles(files); // Guarda os PDFs reais no pai
@@ -83,9 +84,9 @@ export const SendResumesDatabase = () => {
         return (
           <div className="flex h-full items-center justify-center text-center">
             <CardLoadingAnalysis
-              isCompleted={analysisData?.status === "COMPLETED"}
+              isCompleted={isUploading === false}
               contentFinished="Análise concluída!"
-              contentLoad="Análise em andamento..."
+              contentLoad={`Análise em andamento...\n${scratchAnalysisResult.length}/${uploadedFiles.length}`}
             />
           </div>
         );
@@ -94,7 +95,7 @@ export const SendResumesDatabase = () => {
         return (
           <div className="w-full h-full max-w-5xl mx-auto mt-6">
             {/* Aqui entra o componente que mostra currículo por currículo */}
-            <ResumeVerificationFlow uploadedFiles={uploadedFiles} />
+            <ResumeVerificationFlow drafts={scratchAnalysisResult} />
           </div>
         );
 

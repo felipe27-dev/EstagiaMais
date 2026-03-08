@@ -49,6 +49,7 @@ export const AcessResumes = () => {
           <CardShowResumes
             curriculos={curriculos}
             handleCloseResumes={() => navigate("/")}
+            onSelectResume={(resume) => navigate(`/resume-selected/${resume.id}`, { state: { curriculo: resume } })}
             renderMenuOptions={(resume) => (
               <>
                 <p
