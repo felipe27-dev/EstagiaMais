@@ -15,7 +15,7 @@ const ShareButton = ({ children, onClick, colorHover }) => (
 
 // 1. Usamos forwardRef para permitir que o Material UI controle esse componente
 export const ShareModal = forwardRef(
-  ({ onCloseModal, id, onDownload }, ref) => {
+  ({ onCloseModal, id, onDownload, onShare }, ref) => {
     return (
       <div
         ref={ref}
@@ -37,7 +37,7 @@ export const ShareModal = forwardRef(
         </h1>
 
         <div className="w-full flex justify-center gap-6 flex-row">
-          <ShareButton colorHover="hover:text-green-500">
+          <ShareButton onClick={onShare}colorHover="hover:text-green-500">
             <IoLogoWhatsapp size={45} />
           </ShareButton>
 
@@ -45,7 +45,7 @@ export const ShareModal = forwardRef(
             <MdDownload size={45} />
           </ShareButton>
 
-          <ShareButton colorHover="hover:text-red-500">
+          <ShareButton onClick={onShare} colorHover="hover:text-red-500">
             <SiGmail size={45} />
           </ShareButton>
         </div>

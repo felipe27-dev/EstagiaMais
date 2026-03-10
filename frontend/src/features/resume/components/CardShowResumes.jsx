@@ -47,7 +47,8 @@ const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
           className="text-primary hover:text-action cursor-pointer hover:scale-105 transition-transform duration-200"
         />
       </div>
-
+      {/*tag com o score da análise*/}
+      {curriculo.score && (<p className="p-2 bg-primary text-md font-bold text-white rounded-2xl m-2 mb-0">Nota: {curriculo.score}/100</p>)}
       <div className="px-2 mt-3 w-full text-center text-wrap">
         <p
           className="text-primary text-md font-bold truncate w-full"
@@ -67,15 +68,22 @@ export const CardShowResumes = ({
   renderMenuOptions,
 }) => {
   const navigate = useNavigate();
+// Substitua a sua função handleSelectResume por esta:
   const handleSelectResume = (curriculo) => {
-    navigate(`/resume/${curriculo.id}`, { state: { curriculo } });
+    // Salva o currículo completo (com score e feedback da IA) na memória
+    localStorage.setItem(`resume_data_${curriculo.id}`, JSON.stringify(curriculo));
+    
+    // Abre o currículo em uma nova guia, mantendo o Dashboard intacto na guia original!
+    window.open(`/resume/${curriculo.id}`, "_blank");
   };
-
+  console.log(curriculos);
+  //mostra o map do curriculos
   return (
     <div className="w-full h-full flex flex-col relative">
       {/* Grid de Cards */}
       <div className="w-full bg-background/50 rounded-xl flex flex-wrap content-start gap-4 overflow-y-auto p-4 max-h-[330px] scrollbar-thin scrollbar-thumb-gray-300">
         {curriculos.map((curriculo, index) => (
+         
           <ResumeCard
             key={curriculo.id || index} // Use ID se possível, index é fallback
             index={index}

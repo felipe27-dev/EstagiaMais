@@ -1,8 +1,8 @@
 import Header from "@/components/layout/Header";
 import { CardEditResume } from "@/features/resume/components/CardEditResume";
-import { useLocation, useCallback } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { resumeService } from "../../../services/resumeServices";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export const ResumeEdit = () => {
   const location = useLocation();

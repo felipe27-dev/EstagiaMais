@@ -4,15 +4,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { TextField } from "@mui/material";
 import { IoClose } from "react-icons/io5";
-
 import Header from "@/components/layout/Header";
 import { AppButton } from "@/components/ui/AppButton";
 import { ErrorFallback } from "@/components/ui/ErrorFallback";
 import { CardLoadingAnalysis } from "@/features/resume/components/CardLoadingAnalysis";
 import { AnalysisDashboard } from "@/features/resume/components/AnalysisDashboard";
 import { resumeSchema } from "@/features/resume/components/resumeSchema.js";
-
-// ⚠️ Importe o seu service que faz o POST para /analyze
 import { resumeService } from "../../../services/resumeServices"; 
 
 export const SearchResume = () => {
@@ -77,18 +74,15 @@ export const SearchResume = () => {
     }
   };
 
-  // Tratamento de Erro Fatal
-  if (isError) return <ErrorFallback error="Erro ao processar a análise com a IA." />;
-
   // ==========================================
   // RENDERIZAÇÃO CONDICIONAL DAS TELAS
   // ==========================================
 
   return (
     <>
-      <Header fixed={currentStep === "RESULT" ? false : true} />
+      <Header fixed={false} />
       
-      <div className={`h-screen flex justify-center items-center bg-background ${currentStep === "RESULT" ? "mt-10 mb-10 h-full" : ""}`}>
+      <div className={`h-full flex pt-5 justify-center items-center bg-background ${currentStep === "RESULT" ? "mt-10 mb-10 h-full" : ""}`}>
         
         {/* TELA 1: O FORMULÁRIO DE BUSCA */}
         {currentStep === "SEARCH" && (

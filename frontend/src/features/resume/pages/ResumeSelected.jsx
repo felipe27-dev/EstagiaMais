@@ -12,28 +12,36 @@ export const ResumeSelected = () => {
   const [curriculo, setCurriculo] = useState(null);
 
   const handleResumeSelect = useCallback(async() => {
-    try{
-      if (location.state?.curriculo){
-        const { curriculo } = location.state;
-        setCurriculo(curriculo);
-      }else{
-        if (!id || isNaN(Number(id))) {
-           console.error("ID inválido na URL:", id);
-           return; 
-        }
-        const data = await resumeService.getById(id);
-        setCurriculo(data);
-        console.log("Currículo selecionado:", curriculo);
+    try {
+      const savedData = localStorage.getItem(`resume_data_${id}`);
+      if (savedData) {
+        setCurriculo(JSON.parse(savedData));
+        return;
       }
-    }catch(e){
-      console.error("Erro encontrado:",e)
+      if (location.state?.curriculo) {
+        setCurriculo(location.state.curriculo);
+        return;
+      }
+      if (!id || isNaN(Number(id))) return;
+      const data = await resumeService.getById(id);
+      setCurriculo(data);
+      
+    } catch(e) {
+      console.error("Erro encontrado:", e);
     }
-
-  },[id,location.state])
+  }, [id, location.state]);
 
   useEffect(() => {
-    handleResumeSelect() 
-  },[handleResumeSelect])
+    handleResumeSelect();
+  }, [handleResumeSelect]);
+
+  const handleGoBack = () => {
+    if (window.history.length > 2) {
+      navigate(-1);
+    } else {
+      window.close();
+    }
+  };
 
   return (
     <>
@@ -46,13 +54,27 @@ export const ResumeSelected = () => {
               Currículo de {curriculo?.name_candidate || "Candidato"}
             </h1>
             <button
-              onClick={() => navigate(-1)}
+              onClick={handleGoBack}
               className="text-sm text-gray-500 hover:text-primary cursor-pointer"
             >
               Voltar
             </button>
           </div>
-
+          {/* Mostrar score e feedback da análise */}
+          {(curriculo?.score && curriculo?.feedback) &&(
+          <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+            <div className="flex items-center flex-row">
+              <span className="text-2xl font-bold text-primary mr-2 text-nowrap">
+                Score: {curriculo?.score || "0"}
+              </span>
+            </div>
+            <div className="flex items-center flex-col">
+              <span className="text-primary text-lg font-bold">Feedback</span>
+              <span className="text-md font-semibold text-gray-500 mr-1 text-center ml-25">
+                {curriculo?.feedback || "Nenhum feedback disponível."}
+              </span>
+            </div>
+          </div>)}
           {/* Área do PDF */}
           <div className="flex-1 w-full h-full bg-gray-100 relative rounded-2xl">
             <iframe

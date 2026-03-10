@@ -269,8 +269,10 @@ async def analyze_resume(
         # 3. Monta o retorno para o React
         original_resume = resumes_dict.get(item["resume_id"])
         if original_resume:
+            # Transforma o objeto do SQLAlchemy em um dicionário usando o Pydantic
+            resume_dict = ResumeRead.model_validate(original_resume).model_dump()
             final_response.append({
-                "resume": original_resume,
+                **resume_dict,
                 "score": item["score_resume"],
                 "feedback": item["feedback_resume"]
             })

@@ -45,8 +45,11 @@ export const resumeService = {
       throw e; 
     }
   },
-  analysisCreate: async (analysisData) => {
-    const response = await api.post('/resumes/analysis', {tags_request: analysisData.tags, text_request: analysisData.text});
+  analyzeMatch: async (text, tags) => {
+    const response = await api.post('/resumes/analyze', {
+      text_request: text,
+      tags_request: tags
+    });
     return response.data;
   }
 };
