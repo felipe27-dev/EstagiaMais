@@ -12,6 +12,7 @@ import json
 from google import genai
 from google.genai import types
 from code.settings import settings
+
  
 from code.db.dependencies import get_db_session
 from code.db.models.domain import Resume, Analysis, AnalysisResult

@@ -47,6 +47,7 @@ class Settings(BaseSettings):
     db_echo: bool = False
     url_backend: str = "http://localhost:8080"
     gemini_api_key: str = ""
+    secret_key: str = ""
     @property
     def db_url(self) -> URL:
         """

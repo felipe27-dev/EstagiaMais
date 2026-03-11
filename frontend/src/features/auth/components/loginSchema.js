@@ -11,5 +11,6 @@ export const loginSchema = z.object({
     .min(6, "A senha deve ter no mínimo 6 caracteres"),
 });
 
+
 // Inferindo o tipo automaticamente (para TypeScript futuro/IntelliSense)
 // export type LoginFormData = z.infer<typeof loginSchema>;

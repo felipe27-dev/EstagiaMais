@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo_principal-nobg.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { api } from "@/lib/axios";
 import { loginSchema } from "@/features/auth/components/loginSchema";
+import { loginService } from "../../../services/loginService";
 
 export const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,12 +21,16 @@ export const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       console.log("Dados enviados:", data);
-      const response = await api.post("/login", data);
-      response.data && localStorage.setItem("token", response.data.token);
-      console.log("Dados validados:", response);
-      navigate("/");
+      const response = await loginService.signIn(data.email, data.password);
+      if (response && response.access_token) {
+        localStorage.setItem("token", response.access_token);
+        localStorage.setItem("role", response.role);
+        console.log("Login com sucesso! Crachá guardado.");
+        navigate("/");
+      }
     } catch (e) {
       console.error("Erro ao fazer login:", e);
+      alert("Email ou senha incorretos."); 
     }
   };
 

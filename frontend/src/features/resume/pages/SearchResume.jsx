@@ -6,7 +6,6 @@ import { TextField } from "@mui/material";
 import { IoClose } from "react-icons/io5";
 import Header from "@/components/layout/Header";
 import { AppButton } from "@/components/ui/AppButton";
-import { ErrorFallback } from "@/components/ui/ErrorFallback";
 import { CardLoadingAnalysis } from "@/features/resume/components/CardLoadingAnalysis";
 import { AnalysisDashboard } from "@/features/resume/components/AnalysisDashboard";
 import { resumeSchema } from "@/features/resume/components/resumeSchema.js";

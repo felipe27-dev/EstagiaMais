@@ -49,7 +49,7 @@ export default function Header({ fixed = true }) {
           <div className="flex flex-col">
             <p
               className="menu-item-class"
-              onClick={() => navigate("/recadastro")}
+              onClick={() => navigate("/update-login")}
             >
               Mudar Cadastro
             </p>

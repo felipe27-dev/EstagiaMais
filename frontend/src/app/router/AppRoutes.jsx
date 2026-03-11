@@ -2,7 +2,7 @@ import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { EstagiaLoader } from "@/components/layout/Loading";
 
-const delay = (ms = 1000) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Home = lazy(async () => {
   await delay();
@@ -34,7 +34,7 @@ const ChangeInfos = lazy(async () => {
 const AccessResume = lazy(async () => {
   await delay();
   const module = await import("@/features/resume/pages/AccessResumes");
-  return { default: module.AcessResumes };
+  return { default: module.AccessResumes };
 });
 
 const ResumeEdit = lazy(async () => {
@@ -49,6 +49,8 @@ const SendResumesDatabase = lazy(async () => {
   return { default: module.SendResumesDatabase };
 });
 
+import { ProtectedRoute } from "./ProtectedRoute";
+
 // Componente de Loading (Simples e Centralizado)
 const PageLoader = () => <EstagiaLoader />;
 
@@ -56,18 +58,18 @@ export const AppRoutes = () => {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/search-resume" element={<SearchResume />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/resume/:id" element={<ResumeSelected />} />
-        <Route path="/recadastro" element={<ChangeInfos />} />
-        <Route path="/access-resume" element={<AccessResume />} />
-        <Route path="/resume-edit/:id" element={<ResumeEdit />} />
-        <Route
-          path="/send-resumes-database"
-          element={<SendResumesDatabase />}
-        />
+        {/* Rota protegida */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/search-resume" element={<SearchResume />} />
+          <Route path="/resume/:id" element={<ResumeSelected />} />
+          <Route path="/update-login" element={<ChangeInfos />} />
+          <Route path="/access-resume" element={<AccessResume />} />
+          <Route path="/resume-edit/:id" element={<ResumeEdit />} />
+          <Route path="/send-resumes-database" element={<SendResumesDatabase />} />
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
       </Routes>
     </Suspense>
   );

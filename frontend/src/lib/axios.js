@@ -9,12 +9,24 @@ export const api = axios.create({
 
 
 // 3. Interceptor de Resposta
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
 api.interceptors.response.use(
-  (response) => response,
+  (response) => { return response; },
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('estagia_token');
-      window.location.href = '/login';
+    if (error.response && error.response.status === 401) {
+      console.warn("Sessão expirada. Deslogando usuário...");
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      window.location.href = '/login'; 
     }
     return Promise.reject(error);
   }

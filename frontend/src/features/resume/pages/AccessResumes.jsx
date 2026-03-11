@@ -6,7 +6,7 @@ import { Modal } from "@mui/material";
 import { DeleteModal } from "../components/DeleteModal";
 import { resumeService } from "../../../services/resumeServices";
 
-export const AcessResumes = () => {
+export const AccessResumes = () => {
   const navigate = useNavigate();
   const [resumeToDelete, setResumeToDelete] = useState(null);
 

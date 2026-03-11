@@ -30,5 +30,5 @@ class ResumeRead(ResumeBase):
     model_config = ConfigDict(from_attributes=True)
     
 class ResumeCreate(ResumeBase):
-    
     model_config = ConfigDict(from_attributes=True)
+    
