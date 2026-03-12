@@ -9,8 +9,8 @@ export const loginService = {
         const response = await api.get(`/auth/user/${id}`);
         return response.data;
     },
-    updateUser: async(id, userData) => {
-        const response = await api.put(`/auth/user/${id}`, userData);
+    updateUser: async(userData) => {
+        const response = await api.put(`/auth/update-login`, userData);
         return response.data;
     }
     

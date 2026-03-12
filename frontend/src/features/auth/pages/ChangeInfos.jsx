@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { loginService } from "../../../services/loginService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const updateSchema = z
   .object({
@@ -17,16 +17,18 @@ const updateSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem",
-    path: ["confirmPassword"], // O erro aparecerá neste campo
+    path: ["confirmPassword"],
   });
 
 export const ChangeInfos = () => {
   const navigate = useNavigate();
+  // Estado para controlar se os dados já carregaram (ajuda na UX e no Material UI)
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue, // Usado para preencher os dados iniciais
+    reset, // Substituímos o setValue pelo reset
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(updateSchema),
@@ -35,19 +37,25 @@ export const ChangeInfos = () => {
   const handleGetUser = async() => {
     const userId = localStorage.getItem("user_id");
     if (userId) {
-      const user = await loginService.getUserById(userId);
-      setValue("name", user.name);
-      setValue("email", user.email);
-      setValue("password", "");
-      setValue("confirmPassword", "");
+      try {
+        const user = await loginService.getUserById(userId);
+        // O reset preenche o formulário todo de uma vez e ajuda o MUI a entender a atualização
+        reset({
+          name: user.name,
+          email: user.email,
+          password: "",
+          confirmPassword: ""
+        });
+        setDataLoaded(true);
+      } catch (error) {
+        console.error("Erro ao buscar usuário", error);
+      }
     }
   };
 
-
-
   useEffect(() => {
-    handleGetUser()
-  }, [handleGetUser]);
+    handleGetUser();
+  }, []); // Removi o handleGetUser do array de dependências para evitar loops infinitos
 
   const onSubmit = async (data) => {
     try {
@@ -84,6 +92,8 @@ export const ChangeInfos = () => {
               {...register("name")}
               error={!!errors.name}
               helperText={errors.name?.message}
+              // Força a label a ficar para cima
+              InputLabelProps={{ shrink: true }} 
             />
 
             {/* Campo Email */}
@@ -95,6 +105,8 @@ export const ChangeInfos = () => {
               {...register("email")}
               error={!!errors.email}
               helperText={errors.email?.message}
+              // Força a label a ficar para cima
+              InputLabelProps={{ shrink: true }}
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -108,6 +120,7 @@ export const ChangeInfos = () => {
                 {...register("password")}
                 error={!!errors.password}
                 helperText={errors.password?.message}
+                InputLabelProps={{ shrink: true }}
               />
 
               {/* Campo Confirmar Senha */}
@@ -120,11 +133,11 @@ export const ChangeInfos = () => {
                 {...register("confirmPassword")}
                 error={!!errors.confirmPassword}
                 helperText={errors.confirmPassword?.message}
+                InputLabelProps={{ shrink: true }}
               />
             </div>
 
             <div className="w-full flex flex-col md:flex-row justify-center mt-6 gap-4">
-              {/* Botão Cancelar (UX melhorada) */}
               <AppButton
                 variant="outlined"
                 color="action"
@@ -135,12 +148,11 @@ export const ChangeInfos = () => {
                 Cancelar
               </AppButton>
 
-              {/* Botão Salvar */}
               <AppButton
                 variant="contained"
                 color="primary"
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !dataLoaded} // Bloqueia salvar antes de carregar
                 sx={{ width: "100%" }}
               >
                 {isSubmitting ? "Salvando..." : "Salvar Alterações"}

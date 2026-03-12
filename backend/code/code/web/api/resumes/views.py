@@ -115,7 +115,8 @@ async def upload_and_process_resume(
 
 @router.post("/upload/analyze", status_code=status.HTTP_200_OK) 
 async def analyze_resume_upload(
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    db_session: AsyncSession = Depends(get_db_session),
 ):
     """
     Recebe o PDF, extrai texto da memória RAM, faz upload para o Supabase e analisa com a IA.
@@ -141,7 +142,6 @@ async def analyze_resume_upload(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro ao ler os dados do PDF: {str(e)}")
 
-    # 3. Envia os bytes diretamente para o Supabase
     pdf_public_url = ""
     if supabase:
         try:
@@ -197,6 +197,16 @@ async def analyze_resume_upload(
         ai_extracted_data = json.loads(response.text)
         # Adicionamos a URL real e segura que vai ficar guardada para sempre
         ai_extracted_data["resume_archive"] = pdf_public_url
+        #verifica através do nome se o candidato já existe
+        if ai_extracted_data["name_candidate"]:
+            query = select(Resume).where(Resume.name_candidate == ai_extracted_data["name_candidate"])
+            result = await db_session.execute(query)
+            existing_resume = result.scalars().first()
+            if existing_resume:
+                #Se já existe ele apaga o existente 
+                await db_session.delete(existing_resume)
+                await db_session.commit()
+                await db_session.refresh(existing_resume)        
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na análise da IA: {str(e)}")   
 
