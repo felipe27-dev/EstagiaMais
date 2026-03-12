@@ -33,7 +33,8 @@ class Settings(BaseSettings):
     db_echo: bool = False
     frontend_url: str = "http://localhost:5173"
     database_url: Optional[str] = None 
-    
+    supabase_url: str = ""
+    supabase_key: str = ""
     url_backend: str = "http://localhost:8080"
     gemini_api_key: str = ""
     secret_key: str = ""

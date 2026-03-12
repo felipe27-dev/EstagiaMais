@@ -5,19 +5,30 @@ from sqlalchemy import select
 
 import os
 import uuid
-import shutil
-import fitz 
 import json
- 
+import fitz 
+from supabase import create_client, Client
+
 from google import genai
 from google.genai import types
 from code.settings import settings
 
- 
 from code.db.dependencies import get_db_session
 from code.db.models.domain import Resume, Analysis, AnalysisResult
 from code.web.api.resumes.schema import ResumeRead, ResumeCreate, AnalyzeRequest
  
+# ==========================================
+# CONFIGURAÇÃO DO SUPABASE
+# ==========================================
+# Lê as variáveis do ambiente (Koyeb ou seu .env local se você configurou)
+supabase_url = os.environ.get("CODE_SUPABASE_URL")
+supabase_key = os.environ.get("CODE_SUPABASE_KEY")
+
+if supabase_url and supabase_key:
+    supabase: Client = create_client(supabase_url, supabase_key)
+else:
+    supabase = None
+
 router = APIRouter()
  
 @router.get("/", response_model=List[ResumeRead])
@@ -64,7 +75,6 @@ async def delete_resume(
     
     return {"message": "Currículo deletado com sucesso."}
 
-
 @router.put("/{resume_id}", response_model=ResumeRead)
 async def edit_resume(
     resume_id: int,
@@ -85,7 +95,6 @@ async def edit_resume(
     await db_session.commit()
     await db_session.refresh(old_resume) 
     
-    
     return old_resume
 
 @router.post("/", response_model=ResumeRead, status_code=status.HTTP_201_CREATED)
@@ -96,7 +105,6 @@ async def upload_and_process_resume(
     """
     Faz o processo de salvar o curriculo
     """
-
     new_resume = Resume(**extracted_data.model_dump())
  
     db_session.add(new_resume)
@@ -106,43 +114,53 @@ async def upload_and_process_resume(
     return new_resume
 
 @router.post("/upload/analyze", status_code=status.HTTP_200_OK) 
-async def analyze_resume(
+async def analyze_resume_upload(
     file: UploadFile = File(...)
 ):
     """
-    Apenas recebe o PDF, salva fisicamente, extrai na IA e DEVOLVE o rascunho. Não salva no banco.
+    Recebe o PDF, extrai texto da memória RAM, faz upload para o Supabase e analisa com a IA.
     """
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Apenas arquivos PDF são permitidos.")
 
+    # 1. Lê o arquivo inteiramente para a memória RAM
+    file_bytes = await file.read()
+    
     file_extension = file.filename.split(".")[-1]
     unique_filename = f"{uuid.uuid4()}.{file_extension}"
-    file_path = os.path.join("uploads", unique_filename)
 
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    # Extrair o texto do PDF
+    # 2. Extrai o texto diretamente dos bytes em memória (sem salvar no HD)
     extracted_text = ""
     try:
-        pdf_document = fitz.open(file_path)
+        # Abre o PDF usando a stream de bytes
+        pdf_document = fitz.open(stream=file_bytes, filetype="pdf")
         for page_num in range(len(pdf_document)):
             page = pdf_document.load_page(page_num)
             extracted_text += page.get_text()
         pdf_document.close()
     except Exception as e:
-        # Se der erro na leitura, apaga o arquivo quebrado para não poluir o servidor
-        os.remove(file_path)
-        raise HTTPException(status_code=500, detail=f"Erro ao ler o PDF: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erro ao ler os dados do PDF: {str(e)}")
 
-    pdf_public_url = f"{settings.url_backend}/uploads/{unique_filename}"
+    # 3. Envia os bytes diretamente para o Supabase
+    pdf_public_url = ""
+    if supabase:
+        try:
+            supabase.storage.from_("resumes").upload(
+                path=unique_filename,
+                file=file_bytes,
+                file_options={"content-type": file.content_type}
+            )
+            # Pega a URL pública gerada
+            pdf_public_url = supabase.storage.from_("resumes").get_public_url(unique_filename)
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Erro ao salvar arquivo no Supabase: {str(e)}")
+    else:
+        # Fallback de aviso caso as variáveis de ambiente não estejam configuradas
+        pdf_public_url = f"URL_SUPABASE_NAO_CONFIGURADA/{unique_filename}"
+
     # ==========================================
-    # PASSO 3: Passar o texto para a Inteligência Artificial (Próxima Etapa!)
+    # PASSO 4: Inteligência Artificial
     # ==========================================
-    # Aqui nós vamos chamar o Gemini/OpenAI mandando o `extracted_text`.
-    # A IA vai nos devolver um dicionário prontinho. 
-    # Por enquanto, vamos simular os dados que a IA devolveria:
     client = genai.Client(api_key=settings.gemini_api_key)
     
     prompt = f"""
@@ -177,21 +195,20 @@ async def analyze_resume(
             ),
         )
         ai_extracted_data = json.loads(response.text)
+        # Adicionamos a URL real e segura que vai ficar guardada para sempre
         ai_extracted_data["resume_archive"] = pdf_public_url
     except Exception as e:
-        os.remove(file_path)
         raise HTTPException(status_code=500, detail=f"Erro na análise da IA: {str(e)}")   
 
     return ai_extracted_data
 
 @router.post("/analyze", status_code=status.HTTP_200_OK) 
-async def analyze_resume(
+async def analyze_resume_batch(
     payload: AnalyzeRequest,
     db_session: AsyncSession = Depends(get_db_session),
 ):
     """
     Analisa a requisição do tipo de curriculo do usuário e seleciona e mostra os melhores
-    
     """
     result = await db_session.execute(select(Resume))
     resumes = result.scalars().all()
@@ -243,22 +260,18 @@ async def analyze_resume(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erro na análise da IA: {str(e)}")   
 
-    # 1. Cria a Análise Pai usando os nomes EXATOS do seu domain.py
     new_analysis = Analysis(
         text_input=payload.text_request, 
         tags_input=",".join(payload.tags_request)
     )
     
     db_session.add(new_analysis)
-    
-    # O flush() envia para o Postgres e preenche o 'new_analysis.id' magicamente!
     await db_session.flush() 
 
     final_response = []
     resumes_dict = {r.id: r for r in resumes}
     
     for item in ai_extracted_data:
-        # 2. Cria os resultados usando a classe do domain.py
         result_record = AnalysisResult(
             analysis_id=new_analysis.id, 
             resume_id=item["resume_id"],
@@ -267,10 +280,8 @@ async def analyze_resume(
         )
         db_session.add(result_record)
         
-        # 3. Monta o retorno para o React
         original_resume = resumes_dict.get(item["resume_id"])
         if original_resume:
-            # Transforma o objeto do SQLAlchemy em um dicionário usando o Pydantic
             resume_dict = ResumeRead.model_validate(original_resume).model_dump()
             final_response.append({
                 **resume_dict,
@@ -279,8 +290,6 @@ async def analyze_resume(
             })
 
     await db_session.commit()
-    
-    # Ordena do maior score para o menor antes de devolver pro React
     final_response.sort(key=lambda x: x["score"], reverse=True)
     
     return final_response
