@@ -74,7 +74,7 @@ export const ChangeInfos = () => {
       if (data.password !== "") {
         updatePayload.password = data.password;
       }
-      const response = await loginService.updateUser(localStorage.getItem("user_id"), updatePayload);
+      const response = await loginService.updateUser(updatePayload);
       alert("Dados atualizados com sucesso!", response);
       navigate("/");
     } catch (e) {
