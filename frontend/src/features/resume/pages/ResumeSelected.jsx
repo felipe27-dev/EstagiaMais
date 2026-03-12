@@ -78,7 +78,7 @@ export const ResumeSelected = () => {
           {/* Área do PDF */}
           <div className="flex-1 w-full h-full bg-gray-100 relative rounded-2xl">
             <iframe
-              src={(curriculo?.resume_archive?.replace("https://", "http://"))}
+              src={(curriculo?.resume_archive?.replace("http://", "https://"))}
               className="w-full rounded-xl h-175"
               title="Visualizador de Currículo"
               style={{ border: "none" }}
