@@ -29,7 +29,7 @@ export const AnalysisDashboard = ({ analysisData }) => {
         const url = curr.resume_archive; 
         if (!url) return;
 
-        const safeUrl = url.replace("https://", "http://");
+        const safeUrl = url.replace("http://", "https://");
         const response = await fetch(safeUrl);
         const blob = await response.blob();
         
@@ -73,7 +73,7 @@ export const AnalysisDashboard = ({ analysisData }) => {
         return;
       }
 
-      const safeUrl = url.replace("https://", "http://");
+      const safeUrl = url.replace("http://", "https://");
 
       const response = await fetch(safeUrl);
       const blob = await response.blob();

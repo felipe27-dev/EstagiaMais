@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resumeEditSchema } from "./resumeSchema"; 
 import { resumeService } from "../../../services/resumeServices"; 
-import { FileText } from "lucide-react"; // Notei que você usou o FileText no HTML, adicionei o import!
 
 export const CardEditResume = ({ curriculo }) => {
   const navigate = useNavigate();
@@ -88,7 +87,7 @@ export const CardEditResume = ({ curriculo }) => {
             {curriculo.resume_archive && (
               <>
                 <iframe
-                  src={(curriculo?.resume_archive?.replace("https://", "http://"))}
+                  src={(curriculo?.resume_archive?.replace("http://", "https://"))}
                   className="w-full rounded-xl h-125"
                   title="Visualizador de Currículo"
                   style={{ border: "none" }}

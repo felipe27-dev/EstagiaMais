@@ -3,6 +3,7 @@ import { TextField } from "@mui/material";
 import { AppButton } from "@/components/ui/AppButton";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { loginService } from "../../../services/loginService";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
@@ -31,27 +32,34 @@ export const ChangeInfos = () => {
     resolver: zodResolver(updateSchema),
   });
 
+  const handleGetUser = async() => {
+    const userId = localStorage.getItem("user_id");
+    if (userId) {
+      const user = await loginService.getUserById(userId);
+      setValue("name", user.name);
+      setValue("email", user.email);
+      setValue("password", "");
+      setValue("confirmPassword", "");
+    }
+  };
+
+
+
   useEffect(() => {
-    // Exemplo: const user = await api.get('/me');
-    // setValue("name", user.name);
-    // setValue("email", user.email);
-  }, [setValue]);
+    handleGetUser()
+  }, [handleGetUser]);
 
   const onSubmit = async (data) => {
     try {
-      console.log("Dados de atualização:", data);
-      /*
-      // Envia para a rota de atualização (ajuste conforme seu backend)
-      await api.put("/users/update", {
+        const response = await loginService.updateUser(localStorage.getItem("user_id"), {
         name: data.name,
         email: data.email,
         password: data.password
       });
-      
-      alert("Dados atualizados com sucesso!"); */
-      navigate("/"); // Volta para a home/dashboard
+      alert("Dados atualizados com sucesso!");
+      navigate("/");
     } catch (e) {
-      console.error("Erro ao atualizar:", e);
+      alert("Erro ao atualizar os dados.");
     }
   };
 
@@ -59,7 +67,7 @@ export const ChangeInfos = () => {
     <>
       <Header />
       <div className="min-h-screen flex justify-center items-center bg-background pt-20">
-        <div className="bg-white w-[70%] max-w-[600px] rounded-3xl border border-gray-200 shadow-xl p-10  hover:shadow-2xl transition-all duration-300 flex flex-col items-center animate-fade-in">
+        <div className="bg-white w-[70%] max-w-150 rounded-3xl border border-gray-200 shadow-xl p-10  hover:shadow-2xl transition-all duration-300 flex flex-col items-center animate-fade-in">
           <h1 className="text-3xl font-bold text-primary mb-2">
             Atualizar Dados
           </h1>

@@ -184,7 +184,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
           {currentResume.resume_archive ? (
             <iframe
               // Substitui temporariamente HTTPS por HTTP para evitar erro de certificado no localhost
-              src={`${currentResume.resume_archive.replace("https://", "http://")}#view=FitH&toolbar=0&navpanes=0`}
+              src={`${currentResume.resume_archive.replace("http://", "https://")}#view=FitH&toolbar=0&navpanes=0`}
               title="Visualizador de PDF Original"
               className="w-full h-full border-none"
             />

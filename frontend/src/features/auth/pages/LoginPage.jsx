@@ -25,6 +25,7 @@ export const LoginPage = () => {
       if (response && response.access_token) {
         localStorage.setItem("token", response.access_token);
         localStorage.setItem("role", response.role);
+        localStorage.setItem("user_id", response.user_id);
         console.log("Login com sucesso! Crachá guardado.");
         navigate("/");
       }
