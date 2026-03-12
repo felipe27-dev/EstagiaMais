@@ -21,7 +21,7 @@ export const ShareModal = forwardRef(
         ref={ref}
         tabIndex={-1}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-            bg-white w-[90%] max-w-[500px] rounded-2xl shadow-2xl border border-gray-200 
+            bg-white w-[90%] max-w-125 rounded-2xl shadow-2xl border border-gray-200 
             p-8 flex flex-col items-center justify-center text-center outline-none animate-fade-in-up"
       >
         <button

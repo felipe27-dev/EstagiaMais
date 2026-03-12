@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.responses import UJSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from code.settings import settings
 import os
 
 
@@ -29,7 +30,7 @@ def get_app() -> FastAPI:
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173"], 
+        allow_origins=[settings.frontend_url], 
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],

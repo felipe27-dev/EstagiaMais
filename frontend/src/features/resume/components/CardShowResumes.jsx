@@ -81,7 +81,7 @@ export const CardShowResumes = ({
   return (
     <div className="w-full h-full flex flex-col relative">
       {/* Grid de Cards */}
-      <div className="w-full bg-background/50 rounded-xl flex flex-wrap content-start gap-4 overflow-y-auto p-4 max-h-[330px] scrollbar-thin scrollbar-thumb-gray-300">
+      <div className="w-full bg-background/50 rounded-xl flex flex-wrap content-start gap-4 overflow-y-auto p-4 max-h-82.5 scrollbar-thin scrollbar-thumb-gray-300">
         {curriculos.map((curriculo, index) => (
          
           <ResumeCard

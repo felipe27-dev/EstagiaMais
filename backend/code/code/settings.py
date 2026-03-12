@@ -31,8 +31,7 @@ class Settings(BaseSettings):
     db_pass: str = "code" 
     db_base: str = "admin"
     db_echo: bool = False
-    
-
+    frontend_url: str = "http://localhost:5173"
     database_url: Optional[str] = None 
     
     url_backend: str = "http://localhost:8080"
