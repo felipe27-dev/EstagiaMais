@@ -7,7 +7,7 @@ from datetime import timedelta
 from code.web.api.security import verify_password, create_access_token, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
 from code.db.dependencies import get_db_session
 from code.db.models.domain import User
-from code.web.api.login.schema import UserLoginRequest, Token, UserCreateRequest, UserResponse
+from code.web.api.login.schema import UserLoginRequest, Token, UserCreateRequest, UserResponse, UserUpdate
 
 router = APIRouter()
 
@@ -63,7 +63,7 @@ async def register_user(payload: UserCreateRequest, db_session: AsyncSession = D
 
 @router.put("/update-login", response_model=UserResponse)
 async def update_user_login(
-    payload: UserCreateRequest,
+    payload: UserUpdate,
     db_session: AsyncSession = Depends(get_db_session)
 ):
     query = select(User).where(User.email == payload.email)

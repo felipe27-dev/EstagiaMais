@@ -21,3 +21,8 @@ class Token(BaseModel):
     token_type: str
     user_id: int
     role: str
+    
+class UserUpdate(BaseModel):
+    name: str
+    email: str
+    password: str

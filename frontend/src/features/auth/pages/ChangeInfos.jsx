@@ -71,14 +71,11 @@ export const ChangeInfos = () => {
         name: data.name,
         email: data.email,
       };
-      
-      // Só envia a senha para o backend se o usuário realmente digitou uma senha nova
       if (data.password !== "") {
         updatePayload.password = data.password;
       }
-
       const response = await loginService.updateUser(localStorage.getItem("user_id"), updatePayload);
-      alert("Dados atualizados com sucesso!");
+      alert("Dados atualizados com sucesso!", response);
       navigate("/");
     } catch (e) {
       alert("Erro ao atualizar os dados.");
