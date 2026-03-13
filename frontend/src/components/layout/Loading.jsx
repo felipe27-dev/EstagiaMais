@@ -20,7 +20,7 @@ export const EstagiaLoader = () => {
         {/* --- O CENTRO (+) --- */}
         {/* O "+" que pulsa suavemente */}
         <motion.div
-          className="absolute text-4xl font-bold text-primary"
+          className="absolute text-4xl font-bold text-primary dark:text-white"
           animate={{ scale: [1, 1.1, 1], opacity: [0.8, 1, 0.8] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -58,7 +58,7 @@ export const EstagiaLoader = () => {
 
       {/* Texto de apoio com animação sutil */}
       <motion.p 
-        className="mt-6 text-primary font-semibold text-lg tracking-wide"
+        className="mt-6 text-primary dark:text-white font-semibold text-lg tracking-wide"
         animate={{ opacity: [0.5, 1, 0.5] }}
         transition={{ duration: 1.5, repeat: Infinity }}
       >

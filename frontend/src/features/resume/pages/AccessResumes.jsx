@@ -42,7 +42,7 @@ export const AccessResumes = () => {
       <Header />
       <div className="h-screen flex justify-center items-center bg-background dark:bg-[#09091F]">
         <div className="bg-white dark:bg-[#404040]  w-[70%] min-w-87.5 rounded-3xl border border-gray-100 shadow-xl p-10 hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center animate-fade-in text-center pb-6">
-          <h1 className="text-3xl font-bold text-primary mb-4">
+          <h1 className="text-3xl font-bold text-primary dark:text-white mb-4">
             Currículos Disponíveis
           </h1>
 

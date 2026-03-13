@@ -6,7 +6,7 @@ export const ErrorFallback = ({ error, resetErrorBoundary }) => {
       <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
         <span className="text-4xl">🛠️</span>
       </div>
-      <h2 className="text-3xl font-bold text-primary mb-4">
+      <h2 className="text-3xl font-bold text-primary dark:text-white mb-4">
         Um erro foi encontrado!
       </h2>
       <p className="text-gray-500 mb-8 max-w-sm">

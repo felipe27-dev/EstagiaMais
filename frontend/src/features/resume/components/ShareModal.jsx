@@ -6,7 +6,7 @@ import { MdDownload } from "react-icons/md";
 const ShareButton = ({ children, onClick, colorHover }) => (
   <button
     onClick={onClick}
-    className={`p-2 rounded-full transition-transform hover:scale-110 duration-200 ease-in-out text-primary ${colorHover}`}
+    className={`p-2 rounded-full transition-transform hover:scale-110 duration-200 ease-in-out text-primary dark:text-white ${colorHover}`}
     type="button"
   >
     {children}
@@ -32,7 +32,7 @@ export const ShareModal = forwardRef(
           <IoClose size={24} />
         </button>
 
-        <h1 className="text-3xl font-bold text-primary mb-6">
+        <h1 className="text-3xl font-bold text-primary dark:text-white mb-6">
           Selecione como deseja compartilhar a análise #{id}
         </h1>
 

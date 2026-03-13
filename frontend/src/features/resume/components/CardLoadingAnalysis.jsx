@@ -14,7 +14,7 @@ export const CardLoadingAnalysis = ({
     >
       <div className="w-full flex justify-center flex-col text-center items-center">
         {/* Título */}
-        <p className="text-3xl font-bold text-primary mb-6">
+        <p className="text-3xl font-bold text-primary dark:text-white mb-6">
           {isCompleted ? contentFinished : contentLoad}
         </p>
 
@@ -28,7 +28,7 @@ export const CardLoadingAnalysis = ({
             ease: "easeInOut",
           }}
         >
-          <IoDocumentTextSharp size={80} className="text-primary" />
+          <IoDocumentTextSharp size={80} className="text-primary dark:text-white" />
         </motion.div>
 
         {/* Barra de Progresso Corrigida */}

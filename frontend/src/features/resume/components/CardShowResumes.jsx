@@ -23,7 +23,7 @@ const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
       <div className="absolute top-2 right-2">
         <IoMdMenu
           size={24}
-          className="text-gray-400 hover:text-primary cursor-pointer transition-colors"
+          className="text-gray-400 hover:text-primary dark:text-white cursor-pointer transition-colors"
           onClick={handleOpenMenu}
         />
         <Popover
@@ -44,14 +44,14 @@ const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
       <div className="mt-4" onClick={() => onSelect(curriculo)}>
         <IoDocument
           size={80}
-          className="text-primary hover:text-action cursor-pointer hover:scale-105 transition-transform duration-200"
+          className="text-primary dark:text-white hover:text-action cursor-pointer hover:scale-105 transition-transform duration-200"
         />
       </div>
       {/*tag com o score da análise*/}
       {curriculo.score && (<p className="p-2 bg-primary text-md font-bold text-white rounded-2xl m-2 mb-0">Nota: {curriculo.score}/100</p>)}
       <div className="px-2 mt-3 w-full text-center text-wrap">
         <p
-          className="text-primary text-md font-bold truncate w-full"
+          className="text-primary dark:text-white text-md font-bold truncate w-full"
           title={curriculo.name_candidate}
         >
           {curriculo.name_candidate}

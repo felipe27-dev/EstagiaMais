@@ -50,12 +50,12 @@ export const ResumeSelected = () => {
         <div className="bg-white dark:bg-[#404040]  w-[80%] rounded-3xl p-3 border border-gray-200 shadow-xl overflow-hidden flex flex-col transition-transform duration-300">
           {/* Cabeçalho do Card */}
           <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-primary">
+            <h1 className="text-2xl font-bold text-primary dark:text-white">
               Currículo de {curriculo?.name_candidate || "Candidato"}
             </h1>
             <button
               onClick={handleGoBack}
-              className="text-sm text-gray-500 hover:text-primary cursor-pointer"
+              className="text-sm text-gray-500 hover:text-primary dark:text-white cursor-pointer"
             >
               Voltar
             </button>
@@ -64,12 +64,12 @@ export const ResumeSelected = () => {
           {(curriculo?.score && curriculo?.feedback) &&(
           <div className="p-6 border-b border-gray-100 flex justify-between items-center">
             <div className="flex items-center flex-row">
-              <span className="text-2xl font-bold text-primary mr-2 text-nowrap">
+              <span className="text-2xl font-bold text-primary dark:text-white mr-2 text-nowrap">
                 Score: {curriculo?.score || "0"}
               </span>
             </div>
             <div className="flex items-center flex-col">
-              <span className="text-primary text-lg font-bold">Feedback</span>
+              <span className="text-primary dark:text-white text-lg font-bold">Feedback</span>
               <span className="text-md font-semibold text-gray-500 mr-1 text-center ml-25">
                 {curriculo?.feedback || "Nenhum feedback disponível."}
               </span>
@@ -89,7 +89,7 @@ export const ResumeSelected = () => {
                   href={curriculo?.resume_archive }
                   target="_blank"
                   rel="noreferrer"
-                  className="text-primary underline ml-1"
+                  className="text-primary dark:text-white underline ml-1"
                 >
                   Clique aqui para baixar.
                 </a>

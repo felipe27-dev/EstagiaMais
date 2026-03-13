@@ -88,7 +88,7 @@ export const SearchResume = () => {
           <div className="bg-white dark:bg-[#404040]  w-[80%] rounded-3xl border border-gray-200 card-border-glow shadow-xl overflow-hidden items-center justify-center flex-col p-10 hover:scale-[1.01] transition-transform pb-6">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="w-full flex-col justify-center">
-                <h1 className="text-2xl font-bold text-primary mb-4">
+                <h1 className="text-2xl font-bold text-primary dark:text-white mb-4">
                   Envie a descrição da vaga
                 </h1>
                 <TextField
@@ -104,7 +104,7 @@ export const SearchResume = () => {
               </div>
 
               <div className="w-full justify-center mt-6 gap-4 flex-col">
-                <h1 className="text-2xl font-bold text-primary mb-4">
+                <h1 className="text-2xl font-bold text-primary dark:text-white mb-4">
                   Tags obrigatórias (Pressione Enter)
                 </h1>
                 <TextField

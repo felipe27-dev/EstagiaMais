@@ -166,7 +166,7 @@ export const AnalysisDashboard = ({ analysisData }) => {
         Análise concluída!
       </h1>
 
-      <h2 className="text-2xl font-bold text-primary mb-6">
+      <h2 className="text-2xl font-bold text-primary dark:text-white mb-6">
         O que deseja fazer com os currículos?
       </h2>
 

@@ -11,7 +11,7 @@ export default function CardHome() {
             card-border-glow shadow-xl overflow-hidden items-center justify-center  flex-col flex-cols-1 p-10 hover:scale-[1.05] transition-transform`}
       >
         <div className="w-full flex justify-center">
-          <p className="text-3xl! font-bold! text-primary mb-4">
+          <p className="text-3xl! font-bold! text-primary dark:text-white mb-4">
             {" "}
             Seja bem-vindo ao Estagia+ !
           </p>

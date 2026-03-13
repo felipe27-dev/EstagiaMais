@@ -53,7 +53,7 @@ export const CardEditResume = ({ curriculo }) => {
         {/* Cabeçalho do Card */}
         <div className="w-full border-b border-gray-100 p-8 flex justify-between items-center bg-gray-50/50">
           <div className="flex flex-col text-left">
-            <h1 className="text-3xl font-bold text-primary ">
+            <h1 className="text-3xl font-bold text-primary dark:text-white ">
               Editar Currículo
             </h1>
           </div>
@@ -98,7 +98,7 @@ export const CardEditResume = ({ curriculo }) => {
                       href={curriculo?.resume_archive }
                       target="_blank"
                       rel="noreferrer"
-                      className="text-primary underline ml-1"
+                      className="text-primary dark:text-white underline ml-1"
                     >
                       Clique aqui para baixar.
                     </a>
@@ -110,7 +110,7 @@ export const CardEditResume = ({ curriculo }) => {
 
           {/* COLUNA 2: Formulário de Edição */}
           <div className="w-full lg:w-1/2 p-8 flex flex-col ">
-            <h3 className="text-2xl font-bold text-primary mb-6">
+            <h3 className="text-2xl font-bold text-primary dark:text-white mb-6">
               Detalhes do Candidato
             </h3>
 
