@@ -86,7 +86,7 @@ export const ChangeInfos = () => {
     <>
       <Header />
       <div className="min-h-screen flex justify-center items-center bg-background dark:bg-[#09091F] pt-20">
-        <div className="bg-white dark:bg-[#404040]  w-[70%] max-w-150 rounded-3xl border border-gray-200 shadow-xl p-10 hover:shadow-2xl transition-all duration-300 flex flex-col items-center animate-fade-in">
+        <div className="bg-white dark:bg-[#374151]  w-[70%] max-w-150 rounded-3xl border border-gray-200 shadow-xl p-10 hover:shadow-2xl transition-all duration-300 flex flex-col items-center animate-fade-in">
           <h1 className="text-3xl font-bold text-primary dark:text-white mb-2">
             Atualizar Dados
           </h1>

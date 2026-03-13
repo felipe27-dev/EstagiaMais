@@ -9,7 +9,7 @@ export const DeleteModal = forwardRef(
         ref={ref}
         tabIndex={-1}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-        bg-white dark:bg-[#404040]  w-[90%] max-w-[450px] rounded-2xl shadow-2xl border border-gray-200 
+        bg-white dark:bg-[#374151]  w-[90%] max-w-[450px] rounded-2xl shadow-2xl border border-gray-200 
         p-8 flex flex-col items-center justify-center text-center outline-none animate-fade-in-up"
       >
         {/* Botão Fechar (Topo Direita) */}
@@ -38,7 +38,7 @@ export const DeleteModal = forwardRef(
           {/* Botão Cancelar (Secundário) */}
           <button
             onClick={onCloseModal}
-            className="flex-1 py-3 cursor-pointer px-4 bg-white dark:bg-[#404040]  border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
+            className="flex-1 py-3 cursor-pointer px-4 bg-white dark:bg-[#374151]  border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-colors"
           >
             Cancelar
           </button>

@@ -76,10 +76,10 @@ export const ResumeUploadForm = ({ onUpload }) => {
   };
 
   return (
-    <div className="w-full max-w-2xl mt-[3%] bg-white dark:bg-[#404040]  rounded-2xl shadow-lg border border-gray-100 p-8 m-4 animate-fade-in">
+    <div className="w-full max-w-2xl mt-[3%] bg-white dark:bg-[#374151]  rounded-2xl shadow-lg border border-gray-100 p-8 m-4 animate-fade-in">
       {/* Header do Form */}
       <div className="text-center mb-4">
-        <h2 className="text-2xl font-bold text-black ">
+        <h2 className="text-2xl font-bold text-black dark:text-white ">
           Análise de Currículos
         </h2>
       </div>
@@ -94,7 +94,7 @@ export const ResumeUploadForm = ({ onUpload }) => {
           isDragging
             ? "border-blue-500 bg-blue-50/50"
             : "border-gray-300 bg-gray-50 hover:border-blue-400 hover:bg-gray-50/80"
-        }`}
+        } dark:bg-[#1E1E1E] hover:dark:bg-[#1E1E1E]/60`}
       >
         <input
           type="file"
@@ -110,7 +110,7 @@ export const ResumeUploadForm = ({ onUpload }) => {
         />
 
         <div
-          className={`p-4 rounded-full mb-4 transition-colors ${isDragging ? "bg-blue-100" : "bg-white dark:bg-[#404040]  shadow-sm group-hover:bg-blue-50"}`}
+          className={`p-4 rounded-full mb-4 transition-colors ${isDragging ? "bg-blue-100" : "bg-white  shadow-sm group-hover:bg-blue-50"} dark:bg-[#374151]`}
         >
           <UploadCloud
             size={36}
@@ -118,7 +118,7 @@ export const ResumeUploadForm = ({ onUpload }) => {
           />
         </div>
 
-        <p className="text-gray-700 font-medium text-base mb-1">
+        <p className="text-gray-700 dark:text-white font-medium text-base mb-1">
           Arraste e solte os PDFs aqui ou clique para procurar no seu computador
         </p>
       </div>
@@ -150,14 +150,14 @@ export const ResumeUploadForm = ({ onUpload }) => {
             {files.map((file, index) => (
               <li
                 key={`${file.name}-${index}`}
-                className="flex items-center justify-between p-3 bg-white dark:bg-[#404040]  border border-gray-200 rounded-lg shadow-sm hover:border-blue-200 transition-colors"
+                className="flex items-center justify-between p-3 bg-white dark:bg-[#374151]  border border-gray-200 rounded-lg shadow-sm hover:border-blue-200 transition-colors"
               >
                 <div className="flex items-center gap-3 overflow-hidden">
                   <div className="bg-red-50 p-2 rounded-md">
-                    <FileText size={20} className="text-red-500" />
+                    <FileText size={20} className="text-red-200" />
                   </div>
                   <div className="flex flex-col overflow-hidden">
-                    <span className="text-sm font-medium text-gray-700 truncate max-w-50 sm:max-w-75">
+                    <span className="text-sm font-medium text-gray-700 dark:text-white truncate max-w-50 sm:max-w-75">
                       {file.name}
                     </span>
                     <span className="text-xs text-left text-gray-400">

@@ -19,7 +19,7 @@ const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
   //const handleOptionClick = (action) => { handleCloseMenu(); if (action) action(); };
 
   return (
-    <div className="w-40 h-fit py-6  bg-white dark:bg-[#404040]  rounded-xl shadow-sm hover:shadow-md transition-shadow m-2 flex items-center justify-center flex-col relative border border-gray-100">
+    <div className="w-40 h-fit py-6  bg-white dark:bg-[#374151]  rounded-xl shadow-sm hover:shadow-md transition-shadow m-2 flex items-center justify-center flex-col relative border border-gray-100">
       <div className="absolute top-2 right-2">
         <IoMdMenu
           size={24}

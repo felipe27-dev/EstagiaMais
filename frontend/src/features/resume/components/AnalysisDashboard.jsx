@@ -6,7 +6,7 @@ import { ShareModal } from "@/features/resume/components/ShareModal";
 import { CardShowResumes } from "@/features/resume/components/CardShowResumes";
 
 const CardWrapper = ({ children }) => (
-  <div className="bg-white dark:bg-[#404040]  w-[70%] min-w-87.5 rounded-3xl border border-gray-100 shadow-xl p-10 hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center animate-fade-in text-center pb-6">
+  <div className="bg-white dark:bg-[#374151]  w-[70%] min-w-87.5 rounded-3xl border border-gray-100 shadow-xl p-10 hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center animate-fade-in text-center pb-6 -mt-30">
     {children}
   </div>
 );

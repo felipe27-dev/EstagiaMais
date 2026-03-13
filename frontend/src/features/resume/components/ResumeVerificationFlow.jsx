@@ -60,12 +60,12 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
 
   if (isFinished) {
     return (
-      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-[#404040]  rounded-2xl shadow-lg border border-gray-100 p-12 text-center animate-fade-in">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-[#374151]  rounded-2xl shadow-lg border border-gray-100 p-12 text-center animate-fade-in">
         <CheckCircle size={64} className="text-green-500 mx-auto mb-6" />
-        <h2 className="text-3xl font-bold text-gray-800 mb-4">
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
           Revisão Concluída!
         </h2>
-        <p className="text-gray-600 mb-8">
+        <p className="text-gray-600 dark:text-white mb-8">
           Todos os currículos foram verificados e adicionados ao banco de dados com sucesso.
         </p>
         <AppButton
@@ -81,11 +81,11 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
   if (!currentResume) return null;
 
   return (
-    <div className="w-full h-[85vh] bg-white dark:bg-[#404040]  mb-10 rounded-2xl shadow-xl border border-gray-200 overflow-hidden flex flex-col animate-fade-in">
+    <div className="w-full h-[85vh] bg-white dark:bg-[#374151]  mb-10 rounded-2xl shadow-xl border  overflow-hidden flex flex-col animate-fade-in">
       {/* Cabeçalho */}
-      <div className="bg-gray-50 border-b border-gray-200 p-5 flex items-center justify-between z-10 shrink-0">
+      <div className=" border-b  p-5 flex items-center justify-between z-10 shrink-0">
         <div className="text-left">
-          <h2 className="text-xl font-bold text-gray-800">Verificação</h2>
+          <h2 className="text-xl font-bold text-gray-800 dark:text-white">Verificação</h2>
         </div>
         <div className="text-right">
           <span className="text-sm font-bold text-blue-600 bg-blue-100 py-1.5 px-4 rounded-full">
@@ -95,20 +95,20 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
       </div>
 
       {/* Layout Principal Dividido */}
-      <div className="flex flex-1 overflow-hidden relative bg-gray-100">
+      <div className="flex flex-1 overflow-hidden relative">
         
         {/* Lado Esquerdo: Formulário de Edição */}
-        <div className="w-1/2 bg-white dark:bg-[#404040]  p-8 overflow-y-auto border-r border-gray-200 custom-scrollbar">
+        <div className="w-1/2 bg-white dark:bg-[#374151]  p-8 overflow-y-auto border-r border-gray-200 custom-scrollbar">
           <div className="grid grid-cols-1 gap-8">
             
             {/* Seção: Dados Pessoais */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-gray-700 border-b pb-2 mb-4">
+              <h3 className="font-semibold text-gray-700 dark:text-white border-b pb-2 mb-4">
                 Informações Pessoais
               </h3>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">Nome Completo</label>
+                <label className="text-xs font-semibold text-gray-500  dark:text-white mb-1 block">Nome Completo</label>
                 <div className="relative flex items-center">
                   <User size={18} className="absolute left-3 text-gray-400" />
                   <input
@@ -121,7 +121,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
               </div>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">E-mail</label>
+                <label className="text-xs font-semibold text-gray-500  dark:text-white mb-1 block">E-mail</label>
                 <div className="relative flex items-center">
                   <Mail size={18} className="absolute left-3 text-gray-400" />
                   <input
@@ -134,7 +134,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
               </div>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">Telefone</label>
+                <label className="text-xs font-semibold text-gray-500  dark:text-white mb-1 block">Telefone</label>
                 <div className="relative flex items-center">
                   <Phone size={18} className="absolute left-3 text-gray-400" />
                   <input
@@ -149,12 +149,12 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
 
             {/* Seção: Dados Profissionais */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-gray-700 border-b pb-2 mb-4">
+              <h3 className="font-semibold text-gray-700 dark:text-white border-b pb-2 mb-4">
                 Perfil Profissional
               </h3>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">Formação Acadêmica</label>
+                <label className="text-xs font-semibold text-gray-500  dark:text-white mb-1 block">Formação Acadêmica</label>
                 <div className="relative flex items-start">
                   <GraduationCap size={18} className="absolute left-3 top-3 text-gray-400" />
                   <textarea
@@ -167,7 +167,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
               </div>
 
               <div className="relative">
-                <label className="text-xs font-semibold text-gray-500 mb-1 block">Resumo do Perfil gerado pela IA</label>
+                <label className="text-xs font-semibold text-gray-500  dark:text-white mb-1 block">Resumo do Perfil gerado pela IA</label>
                 <textarea
                   rows={6}
                   value={currentResume.profile_candidate || ""}
@@ -198,7 +198,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
       </div>
 
       {/* Footer / Ações de Navegação */}
-      <div className="bg-gray-50 border-t border-gray-200 p-5 flex items-center justify-between z-10 shrink-0">
+      <div className="border-t border-gray-200 p-5 flex items-center justify-between z-10 shrink-0">
         <AppButton
           onClick={handlePrev}
           disabled={currentIndex === 0 || isSaving}

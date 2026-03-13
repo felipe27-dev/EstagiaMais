@@ -49,7 +49,7 @@ export const CardEditResume = ({ curriculo }) => {
 
   return (
     <>
-      <div className="bg-white dark:bg-[#404040]  w-[90%] max-w-7xl rounded-3xl border border-gray-100 shadow-xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl">
+      <div className="bg-white dark:bg-[#374151]  w-[90%] max-w-7xl rounded-3xl border border-gray-100 shadow-xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl">
         {/* Cabeçalho do Card */}
         <div className="w-full border-b border-gray-100 p-8 flex justify-between items-center bg-gray-50/50">
           <div className="flex flex-col text-left">

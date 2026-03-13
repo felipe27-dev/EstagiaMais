@@ -25,7 +25,6 @@ export const AppButton = ({
         "&:hover": {
           backgroundColor: `color-mix(in srgb, ${color}, black 15%)`,
         },
-        
         padding: padding,
         borderRadius: radius,
         textTransform: "none",

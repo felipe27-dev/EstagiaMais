@@ -37,7 +37,7 @@ export const LoginPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-background dark:bg-[#09091F]">
-      <div className="bg-white dark:bg-[#404040]  w-[90%] md:w-[40%] rounded-3xl border border-gray-200 shadow-xl overflow-hidden flex flex-col p-10 hover:scale-[1.01] transition-transform duration-300">
+      <div className="bg-white dark:bg-[#374151]  w-[90%] md:w-[40%] rounded-3xl border border-gray-200 shadow-xl overflow-hidden flex flex-col p-10 hover:scale-[1.01] transition-transform duration-300">
         <div className="w-full flex justify-center mb-4">
           <img
             src={logo}

@@ -8,9 +8,9 @@ export const CardLoadingAnalysis = ({
 }) => {
   return (
     <div
-      className={`bg-white dark:bg-[#404040]  w-125 mt-5 rounded-3xl border border-gray-200
+      className={`bg-white dark:bg-[#374151]  w-125 rounded-3xl border border-gray-200
             card-border-glow shadow-xl overflow-hidden items-center justify-center 
-            text-center flex flex-col p-10 transition-transform hover:scale-[1.02]`}
+            text-center flex flex-col p-10 -mt-40 transition-transform hover:scale-[1.02]`}
     >
       <div className="w-full flex justify-center flex-col text-center items-center">
         {/* Título */}
