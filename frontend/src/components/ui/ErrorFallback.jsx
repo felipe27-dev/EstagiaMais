@@ -2,7 +2,7 @@ import { AppButton } from "./AppButton";
 
 export const ErrorFallback = ({ error, resetErrorBoundary }) => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] p-10 text-center bg-white rounded-[2.5rem] shadow-xl border border-red-50 m-6">
+    <div className="flex flex-col items-center justify-center min-h-[400px] p-10 text-center bg-white dark:bg-[#404040]  rounded-[2.5rem] shadow-xl border border-red-50 m-6">
       <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
         <span className="text-4xl">🛠️</span>
       </div>

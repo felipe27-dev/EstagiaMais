@@ -3,15 +3,25 @@ import { FaUser, FaEllipsisV } from "react-icons/fa";
 import { Popover } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import logo from "@/assets/logo_principal-nobg.png";
+// Importe o hook do arquivo onde você salvou o ThemeProvider
+import { useColorTheme } from "@/app/providers/ThemeProvider"; 
 
 export default function Header({ fixed = true }) {
   const [userMenuAnchor, setUserMenuAnchor] = useState(null);
   const [settingsMenuAnchor, setSettingsMenuAnchor] = useState(null);
   const navigate = useNavigate();
+  
+  // Puxa a função de trocar o tema do nosso Contexto
+  const { toggleColorMode } = useColorTheme();
 
-  // Handlers simplificados
   const handleUserClick = (e) => setUserMenuAnchor(e.currentTarget);
   const handleSettingsClick = (e) => setSettingsMenuAnchor(e.currentTarget);
+  
+  // O seu botão agora fica super limpo:
+  const handleChangeTheme = () => {
+    toggleColorMode();
+    handleClose();
+  };
 
   const handleClose = () => {
     setUserMenuAnchor(null);
@@ -76,7 +86,7 @@ export default function Header({ fixed = true }) {
           }}
         >
           <div className="flex flex-col">
-            <p className="menu-item-class">Alterar Tema</p>
+            <p className="menu-item-class" onClick={handleChangeTheme}>Alterar Tema</p>
             <p className="menu-item-class">Guia de Uso</p>
           </div>
         </Popover>

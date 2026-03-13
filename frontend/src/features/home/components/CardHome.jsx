@@ -7,7 +7,7 @@ export default function CardHome() {
   return (
     <>
       <div
-        className={`bg-white w-[40%] rounded-3xl border border-gray-200
+        className={`bg-white dark:bg-[#404040]  w-[40%] rounded-3xl border border-gray-200
             card-border-glow shadow-xl overflow-hidden items-center justify-center  flex-col flex-cols-1 p-10 hover:scale-[1.05] transition-transform`}
       >
         <div className="w-full flex justify-center">

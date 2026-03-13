@@ -109,7 +109,7 @@ export const SendResumesDatabase = () => {
       <Header fixed={false} />
 
       <div
-        className={`h-auto w-full bg-background flex justify-center items-center `}
+        className={`h-auto w-full bg-background dark:bg-[#09091F] flex justify-center items-center `}
       >
         {renderContent()}
       </div>

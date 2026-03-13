@@ -60,7 +60,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
 
   if (isFinished) {
     return (
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-lg border border-gray-100 p-12 text-center animate-fade-in">
+      <div className="w-full max-w-2xl mx-auto bg-white dark:bg-[#404040]  rounded-2xl shadow-lg border border-gray-100 p-12 text-center animate-fade-in">
         <CheckCircle size={64} className="text-green-500 mx-auto mb-6" />
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
           Revisão Concluída!
@@ -81,7 +81,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
   if (!currentResume) return null;
 
   return (
-    <div className="w-full h-[85vh] bg-white mb-10 rounded-2xl shadow-xl border border-gray-200 overflow-hidden flex flex-col animate-fade-in">
+    <div className="w-full h-[85vh] bg-white dark:bg-[#404040]  mb-10 rounded-2xl shadow-xl border border-gray-200 overflow-hidden flex flex-col animate-fade-in">
       {/* Cabeçalho */}
       <div className="bg-gray-50 border-b border-gray-200 p-5 flex items-center justify-between z-10 shrink-0">
         <div className="text-left">
@@ -98,7 +98,7 @@ export const ResumeVerificationFlow = ({ drafts = [] }) => {
       <div className="flex flex-1 overflow-hidden relative bg-gray-100">
         
         {/* Lado Esquerdo: Formulário de Edição */}
-        <div className="w-1/2 bg-white p-8 overflow-y-auto border-r border-gray-200 custom-scrollbar">
+        <div className="w-1/2 bg-white dark:bg-[#404040]  p-8 overflow-y-auto border-r border-gray-200 custom-scrollbar">
           <div className="grid grid-cols-1 gap-8">
             
             {/* Seção: Dados Pessoais */}

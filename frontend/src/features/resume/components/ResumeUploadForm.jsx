@@ -76,7 +76,7 @@ export const ResumeUploadForm = ({ onUpload }) => {
   };
 
   return (
-    <div className="w-full max-w-2xl mt-[3%] bg-white rounded-2xl shadow-lg border border-gray-100 p-8 m-4 animate-fade-in">
+    <div className="w-full max-w-2xl mt-[3%] bg-white dark:bg-[#404040]  rounded-2xl shadow-lg border border-gray-100 p-8 m-4 animate-fade-in">
       {/* Header do Form */}
       <div className="text-center mb-4">
         <h2 className="text-2xl font-bold text-black ">
@@ -110,7 +110,7 @@ export const ResumeUploadForm = ({ onUpload }) => {
         />
 
         <div
-          className={`p-4 rounded-full mb-4 transition-colors ${isDragging ? "bg-blue-100" : "bg-white shadow-sm group-hover:bg-blue-50"}`}
+          className={`p-4 rounded-full mb-4 transition-colors ${isDragging ? "bg-blue-100" : "bg-white dark:bg-[#404040]  shadow-sm group-hover:bg-blue-50"}`}
         >
           <UploadCloud
             size={36}
@@ -150,7 +150,7 @@ export const ResumeUploadForm = ({ onUpload }) => {
             {files.map((file, index) => (
               <li
                 key={`${file.name}-${index}`}
-                className="flex items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:border-blue-200 transition-colors"
+                className="flex items-center justify-between p-3 bg-white dark:bg-[#404040]  border border-gray-200 rounded-lg shadow-sm hover:border-blue-200 transition-colors"
               >
                 <div className="flex items-center gap-3 overflow-hidden">
                   <div className="bg-red-50 p-2 rounded-md">

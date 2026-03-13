@@ -32,7 +32,7 @@ export const ResumeEdit = () => {
       <Header fixed={false} />
 
       {/* Wrapper Principal com scroll suave se a tela for pequena */}
-      <div className="min-h-screen flex justify-center items-start bg-background py-10 animate-fade-in">
+      <div className="min-h-screen flex justify-center items-start bg-background dark:bg-[#09091F] py-10 animate-fade-in">
         <CardEditResume curriculo={curriculo} />
       </div>
     </>

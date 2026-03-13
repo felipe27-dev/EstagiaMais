@@ -8,7 +8,7 @@ export const CardLoadingAnalysis = ({
 }) => {
   return (
     <div
-      className={`bg-white w-125 mt-5 rounded-3xl border border-gray-200
+      className={`bg-white dark:bg-[#404040]  w-125 mt-5 rounded-3xl border border-gray-200
             card-border-glow shadow-xl overflow-hidden items-center justify-center 
             text-center flex flex-col p-10 transition-transform hover:scale-[1.02]`}
     >

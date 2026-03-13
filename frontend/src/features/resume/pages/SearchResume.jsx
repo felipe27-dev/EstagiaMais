@@ -81,11 +81,11 @@ export const SearchResume = () => {
     <>
       <Header fixed={false} />
       
-      <div className={`h-full flex pt-5 justify-center items-center bg-background ${currentStep === "RESULT" ? "mt-10 mb-10 h-full" : ""}`}>
+      <div className={`h-full flex pt-5 justify-center items-center bg-background dark:bg-[#09091F] ${currentStep === "RESULT" ? "mt-10 mb-10 h-full" : ""}`}>
         
         {/* TELA 1: O FORMULÁRIO DE BUSCA */}
         {currentStep === "SEARCH" && (
-          <div className="bg-white w-[80%] rounded-3xl border border-gray-200 card-border-glow shadow-xl overflow-hidden items-center justify-center flex-col p-10 hover:scale-[1.01] transition-transform pb-6">
+          <div className="bg-white dark:bg-[#404040]  w-[80%] rounded-3xl border border-gray-200 card-border-glow shadow-xl overflow-hidden items-center justify-center flex-col p-10 hover:scale-[1.01] transition-transform pb-6">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="w-full flex-col justify-center">
                 <h1 className="text-2xl font-bold text-primary mb-4">

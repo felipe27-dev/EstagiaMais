@@ -47,7 +47,7 @@ export const ResumeSelected = () => {
     <>
       <Header />
       <div className="h-scren max-h-full flex justify-center items-center bg-gray-50 pt-30 pb-10">
-        <div className="bg-white w-[80%] rounded-3xl p-3 border border-gray-200 shadow-xl overflow-hidden flex flex-col transition-transform duration-300">
+        <div className="bg-white dark:bg-[#404040]  w-[80%] rounded-3xl p-3 border border-gray-200 shadow-xl overflow-hidden flex flex-col transition-transform duration-300">
           {/* Cabeçalho do Card */}
           <div className="p-6 border-b border-gray-100 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-primary">

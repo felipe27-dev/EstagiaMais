@@ -19,7 +19,7 @@ const ResumeCard = ({ curriculo, onSelect, renderMenuOptions }) => {
   //const handleOptionClick = (action) => { handleCloseMenu(); if (action) action(); };
 
   return (
-    <div className="w-40 h-fit py-6  bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow m-2 flex items-center justify-center flex-col relative border border-gray-100">
+    <div className="w-40 h-fit py-6  bg-white dark:bg-[#404040]  rounded-xl shadow-sm hover:shadow-md transition-shadow m-2 flex items-center justify-center flex-col relative border border-gray-100">
       <div className="absolute top-2 right-2">
         <IoMdMenu
           size={24}
@@ -81,7 +81,7 @@ export const CardShowResumes = ({
   return (
     <div className="w-full h-full flex flex-col relative">
       {/* Grid de Cards */}
-      <div className="w-full bg-background/50 rounded-xl flex flex-wrap content-start gap-4 overflow-y-auto p-4 max-h-82.5 scrollbar-thin scrollbar-thumb-gray-300">
+      <div className="w-full bg-background dark:bg-[#09091F]/50 rounded-xl flex flex-wrap content-start gap-4 overflow-y-auto p-4 max-h-82.5 scrollbar-thin scrollbar-thumb-gray-300">
         {curriculos.map((curriculo, index) => (
          
           <ResumeCard
