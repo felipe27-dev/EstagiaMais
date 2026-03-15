@@ -1,6 +1,7 @@
 /* src/styles/index.css */
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
 /* Na v4, configuramos o tema aqui dentro usando @theme */
 @theme {
   /* Cores personalizadas (substitui o tailwind.config.js) */
@@ -23,6 +24,9 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+}
+.dark .menu-item-class{
+  color: white;
 }
 
 .menu-item-class:hover{

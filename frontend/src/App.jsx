@@ -10,7 +10,7 @@ function App() {
     <QueryProvider>
       <MuiThemeProvider>
         <BrowserRouter>
-          <main className="min-h-screen items-center text-cente ">
+          <main className="min-h-screen items-center text-center ">
             <ErrorBoundary
               FallbackComponent={ErrorFallback}
               onReset={() => {

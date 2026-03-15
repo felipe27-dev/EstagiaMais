@@ -40,8 +40,7 @@ export const MuiThemeProvider = ({ children }) => {
           primary: { main: '#110364', contrastText: '#ffffff' },
           secondary: { main: '#F4C300', contrastText: '#000000' },
           background: {
-            // Sincroniza o fundo padrão com o Tailwind
-            default: mode === 'dark' ? '#111827' : '#EAEAEA', 
+            default: mode === 'dark' ? '#09091F' : '#D4D4D4', 
           },
           error: { main: '#E20000' },
           success: { main: '#119400' },

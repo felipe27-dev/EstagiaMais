@@ -6,7 +6,7 @@ import { ShareModal } from "@/features/resume/components/ShareModal";
 import { CardShowResumes } from "@/features/resume/components/CardShowResumes";
 
 const CardWrapper = ({ children }) => (
-  <div className="bg-white dark:bg-[#374151]  w-[70%] min-w-87.5 rounded-3xl border border-gray-100 shadow-xl p-10 hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center animate-fade-in text-center pb-6 -mt-30">
+  <div className="bg-white dark:bg-[#374151] w-[90%] sm:w-auto sm:min-w-87.5 max-w-sm md:max-w-md rounded-3xl border border-gray-100 dark:border-gray-700 shadow-xl p-6 md:p-10 pb-6 md:pb-8 hover:shadow-2xl transition-all duration-300 flex flex-col items-center justify-center animate-fade-in text-center mt-4 md:-mt-30 mx-auto">
     {children}
   </div>
 );
@@ -132,7 +132,7 @@ export const AnalysisDashboard = ({ analysisData }) => {
   if (visualMode) {
     return (
       <CardWrapper>
-        <h1 className="text-3xl font-bold text-green-600 mb-2 -mt-6">
+        <h1 className="text-3xl font-bold text-green-600 mb-2 -mt-2">
           Visualizando Análise
         </h1>
         <CardShowResumes

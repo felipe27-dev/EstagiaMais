@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
@@ -25,40 +25,32 @@ export const SearchResume = () => {
     resolver: zodResolver(resumeSchema),
   });
 
-  // --- Lógica de Envio Real com React Query (Mutation) ---
-  const { mutate: performAnalysis, isPending, isError } = useMutation({
+  // --- Lógica de Envio Real com React Query ---
+  const { mutate: performAnalysis, isPending } = useMutation({
     onMutate: () => {
-      // Assim que clica em enviar, muda pra tela de loading
       setCurrentStep("PROCESSING");
     },
     mutationFn: async (payload) => {
-      // Faz o POST real para o FastAPI passando o texto e as tags
       const response = await resumeService.analyzeMatch(payload.text, payload.tags);
       return response;
     },
     onSuccess: (data) => {
-      // Salva os dados da IA no estado
       setAnalysisResult(data);
-      
-      // Delay de 3 segundos para o usuário ver o "Concluído" verde
       setTimeout(() => {
         setCurrentStep("RESULT");
       }, 3000);
     },
     onError: () => {
-      // Se der erro, volta pro formulário e avisa
       setCurrentStep("SEARCH");
       alert("Houve um erro na análise. Tente novamente.");
     }
   });
 
-  // Função disparada ao submeter o formulário
   const onSubmit = (data) => {
     if (tags.length === 0) {
       alert("Por favor, adicione pelo menos uma categoria (tag).");
       return;
     }
-    // Dispara a IA
     performAnalysis({ text: data.text, tags: tags });
   };
 
@@ -69,46 +61,49 @@ export const SearchResume = () => {
       setTags([...tags, currentValue]);
       event.target.value = "";
     } else if (event.key === "Enter") {
-      event.preventDefault(); // Evita que o Enter vazio submeta o formulário sem querer
+      event.preventDefault();
     }
   };
-
-  // ==========================================
-  // RENDERIZAÇÃO CONDICIONAL DAS TELAS
-  // ==========================================
 
   return (
     <>
       <Header fixed={false} />
       
-      <div className={`h-full min-h-screen flex justify-center items-center bg-background dark:bg-[#09091F]`}>
+      {/* Removi o bg-background fixo. Agora ele herda o CssBaseline e ganha py-8 no mobile para não grudar no topo */}
+      <div className="w-full min-h-[calc(100vh-100px)] flex justify-center items-center py-8 lg:py-0 px-4">
         
         {/* TELA 1: O FORMULÁRIO DE BUSCA */}
         {currentStep === "SEARCH" && (
-          <div className="bg-white dark:bg-[#374151] -mt-20  w-[80%] rounded-3xl border border-gray-200 card-border-glow shadow-xl overflow-hidden items-center justify-center flex-col p-10 hover:scale-[1.01] transition-transform pb-6 ">
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="w-full flex-col justify-center">
-                <h1 className="text-2xl font-bold text-primary dark:text-white mb-4">
+          <div className="bg-white dark:bg-[#374151] mt-0 lg:-mt-20 w-full sm:w-[90%] md:w-[80%] max-w-4xl rounded-3xl border border-gray-200 dark:border-gray-700 card-border-glow shadow-xl overflow-hidden flex flex-col p-6 sm:p-10 hover:scale-[1.01] transition-transform">
+            <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+              
+              <div className="w-full flex flex-col justify-center">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary dark:text-white mb-4">
                   Envie a descrição da vaga
                 </h1>
                 <TextField
                   multiline
-                  rows={7}
-                  inputProps={{ style: { fontSize: 18 } }}
+                  rows={5} // Diminuído levemente para não ocupar a tela inteira do celular
+                  inputProps={{ style: { fontSize: "16px" } }} // Fonte ajustada para mobile
                   placeholder="Ex: Procuro um Desenvolvedor Pleno com experiência em React e Python..."
                   {...register("text")}
                   error={!!errors.text}
                   helperText={errors.text?.message}
                   fullWidth
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      backgroundColor: "transparent",
+                    }
+                  }}
                 />
               </div>
 
-              <div className="w-full justify-center mt-6 gap-4 flex-col">
-                <h1 className="text-2xl font-bold text-primary dark:text-white mb-4">
+              <div className="w-full flex flex-col justify-center mt-6 md:mt-8">
+                <h1 className="text-xl sm:text-2xl font-bold text-primary dark:text-white mb-4">
                   Tags obrigatórias (Pressione Enter)
                 </h1>
                 <TextField
-                  inputProps={{ style: { fontSize: 18 } }}
+                  inputProps={{ style: { fontSize: "16px" } }}
                   onKeyDown={handleKeyDown}
                   placeholder={tags.length === 0 ? "Ex: React, Python, Pleno..." : ""}
                   fullWidth
@@ -118,12 +113,12 @@ export const SearchResume = () => {
                         {tags.map((tag, index) => (
                           <span
                             key={index}
-                            className="bg-primary py-1 px-3 rounded-full font-bold text-sm text-white flex items-center gap-1"
+                            className="bg-primary py-1.5 px-3 rounded-full font-bold text-xs sm:text-sm text-white flex items-center gap-1.5"
                           >
                             {tag}
                             <IoClose
                               size={16}
-                              className="cursor-pointer hover:text-gray-200"
+                              className="cursor-pointer hover:text-gray-200 transition-colors"
                               onClick={() => setTags(tags.filter((_, i) => i !== index))}
                             />
                           </span>
@@ -133,17 +128,20 @@ export const SearchResume = () => {
                   }}
                   sx={{
                     "& .MuiInputBase-root": { flexWrap: "wrap", alignItems: "center", gap: "4px" },
-                    "& .MuiInputBase-input": { width: "auto", flexGrow: 1, minWidth: "100px", fontSize: "18px" },
+                    "& .MuiInputBase-input": { width: "auto", flexGrow: 1, minWidth: "120px" },
                   }}
                 />
               </div>
-              <div className="w-full flex-col justify-end items-end mt-4 text-right">
+
+              {/* Botão Responsivo */}
+              <div className="w-full flex justify-center sm:justify-end mt-8">
                 <AppButton
                   color="primary"
                   type="submit"
                   disabled={isPending}
-                  padding="8px 26px"
+                  padding="12px 26px"
                   radius="18px"
+                  className="w-full sm:w-auto"
                 >
                   {isPending ? "Analisando..." : "Buscar Melhores Candidatos"}
                 </AppButton>

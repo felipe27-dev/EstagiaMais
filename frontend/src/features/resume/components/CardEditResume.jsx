@@ -16,7 +16,6 @@ export const CardEditResume = ({ curriculo }) => {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(resumeEditSchema),
-    // Usamos o "?" para o formulário não quebrar no milissegundo em que o curriculo é null
     values: {
       name_candidate: curriculo?.name_candidate || "",
       email_candidate: curriculo?.email_candidate || "",
@@ -38,32 +37,34 @@ export const CardEditResume = ({ curriculo }) => {
     }
   };
 
-  // 2. EARLY RETURN: A tela de loading entra SÓ DEPOIS de todos os hooks!
   if (!curriculo) {
     return (
       <div className="flex justify-center items-center h-full p-20">
-        <CircularProgress color="success" />
+        <CircularProgress color="primary" />
       </div>
     );
   }
 
   return (
     <>
-      <div className="bg-white dark:bg-[#374151]  w-[90%] max-w-7xl rounded-3xl border border-gray-100 shadow-xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl">
-        {/* Cabeçalho do Card */}
-        <div className="w-full border-b border-gray-100 p-8 flex justify-between items-center bg-gray-50/50">
-          <div className="flex flex-col text-left">
-            <h1 className="text-3xl font-bold text-primary dark:text-white ">
+      <div className="bg-white dark:bg-[#374151] w-[95%] sm:w-[90%] max-w-7xl rounded-3xl border border-gray-100 dark:border-gray-700 shadow-xl overflow-hidden flex flex-col transition-all duration-300 hover:shadow-2xl my-6 mx-auto">
+        
+        {/* Cabeçalho do Card Responsivo */}
+        <div className="w-full border-b border-gray-100 dark:border-gray-700 p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4 bg-gray-50/50 dark:bg-gray-800/30">
+          <div className="flex flex-col text-center md:text-left w-full md:w-auto">
+            <h1 className="text-2xl md:text-3xl font-bold text-primary dark:text-white">
               Editar Currículo
             </h1>
           </div>
-          <div className="flex gap-3">
+          
+          <div className="flex flex-wrap justify-center gap-3 w-full md:w-auto">
             <AppButton
               onClick={() => navigate(-1)}
               color="secondary"
               padding="10px 18px"
               startIcon={<IoArrowBack />}
               disabled={isSubmitting}
+              className="flex-1 sm:flex-none justify-center"
             >
               Voltar
             </AppButton>
@@ -74,6 +75,7 @@ export const CardEditResume = ({ curriculo }) => {
               startIcon={isSubmitting ? <CircularProgress size={20} color="inherit"/> : <IoSave />}
               onClick={handleSubmit(onSubmit)}
               disabled={isSubmitting}
+              className="flex-1 sm:flex-none justify-center"
             >
               {isSubmitting ? "Salvando..." : "Salvar Alterações"}
             </AppButton>
@@ -82,39 +84,37 @@ export const CardEditResume = ({ curriculo }) => {
 
         {/* Corpo do Conteúdo */}
         <div className="flex flex-col lg:flex-row w-full h-full">
+          
           {/* COLUNA 1: Visualização do Documento (PDF) */}
-          <div className="w-full lg:w-1/2 p-8 bg-gray-50 border-r border-gray-100 flex flex-col items-center">
+          <div className="w-full lg:w-1/2 p-4 md:p-8 bg-gray-50 dark:bg-[#1E1E1E] border-b lg:border-b-0 lg:border-r border-gray-100 dark:border-gray-700 flex flex-col items-center shrink-0">
             {curriculo.resume_archive && (
-              <>
-                <iframe
-                  src={(curriculo?.resume_archive?.replace("http://", "https://"))}
-                  className="w-full rounded-xl h-125"
-                  title="Visualizador de Currículo"
-                  style={{ border: "none" }}
-                >
-                  <p className="p-10 text-center">
-                    Seu navegador não suporta visualização de PDF.
-                    <a
-                      href={curriculo?.resume_archive }
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-primary dark:text-white underline ml-1"
-                    >
-                      Clique aqui para baixar.
-                    </a>
-                  </p>
-                </iframe>
-              </>
+              <iframe
+                src={(curriculo?.resume_archive?.replace("http://", "https://")) + "#view=FitH&toolbar=0&navpanes=0"}
+                className="w-full rounded-xl h-100 md:h-150 border-none"
+                title="Visualizador de Currículo"
+              >
+                <p className="p-10 text-center dark:text-gray-300">
+                  Seu navegador não suporta visualização de PDF.
+                  <a
+                    href={curriculo?.resume_archive}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-primary dark:text-blue-400 underline ml-1"
+                  >
+                    Clique aqui para baixar.
+                  </a>
+                </p>
+              </iframe>
             )}
           </div>
 
           {/* COLUNA 2: Formulário de Edição */}
-          <div className="w-full lg:w-1/2 p-8 flex flex-col ">
-            <h3 className="text-2xl font-bold text-primary dark:text-white mb-6">
+          <div className="w-full lg:w-1/2 p-6 md:p-8 flex flex-col bg-white dark:bg-[#374151]">
+            <h3 className="text-xl md:text-2xl font-bold text-primary dark:text-white mb-6">
               Detalhes do Candidato
             </h3>
 
-            <form id="edit-resume-form" className="flex flex-col gap-5 h-full pr-2 custom-scrollbar">
+            <form id="edit-resume-form" className="flex flex-col gap-5 h-full md:pr-2 custom-scrollbar">
               <TextField
                 label="Nome Completo"
                 variant="outlined"
@@ -126,7 +126,7 @@ export const CardEditResume = ({ curriculo }) => {
                 helperText={errors.name_candidate?.message}
               />
 
-              <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-5">
                 <TextField
                   label="Email"
                   type="email"
